@@ -1,0 +1,48 @@
+@import 'tailwindcss';
+
+/*
+ * Design tokens del proyecto. Todo el sitio se compone con estas variables:
+ * si el cliente quiere otra paleta o tipografía, se cambia acá y no en cada componente.
+ */
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  --color-ink: oklch(0.22 0.012 265);
+  --color-muted: oklch(0.53 0.014 265);
+  --color-line: oklch(0.92 0.005 265);
+  --color-surface: oklch(1 0 0);
+  --color-subtle: oklch(0.975 0.003 265);
+  --color-accent: oklch(0.52 0.13 255);
+
+  /* Ritmo vertical: el "mucho espacio en blanco" del brief, en una sola escala. */
+  --spacing-section: 6rem;
+  --spacing-section-lg: 9rem;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Respeta a quien pidió menos movimiento: desactiva autoplay y transiciones. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}

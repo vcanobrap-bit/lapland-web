@@ -1,0 +1,8 @@
+.next
+node_modules
+.agents
+.claude
+src/payload-types.ts
+src/app/(payload)
+migrations
+package-lock.json
