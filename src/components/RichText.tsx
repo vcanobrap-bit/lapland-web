@@ -20,7 +20,9 @@ export function RichText({ data, className }: RichTextProps) {
   return (
     <LexicalRichText
       data={data}
-      disableContainer
+      // Sin contenedor, el converter descarta el div envolvente y con él la
+      // className: los estilos de abajo quedarían sin ningún elemento al que
+      // aplicarse. Se paga un div para que la tipografía del contenido exista.
       className={cn(
         'text-muted space-y-4 leading-relaxed',
         '[&_h2]:text-ink [&_h2]:mt-10 [&_h2]:text-2xl [&_h2]:font-medium [&_h2]:tracking-tight',

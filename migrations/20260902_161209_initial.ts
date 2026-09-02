@@ -2,7 +2,8 @@ import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
 
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
-   CREATE TYPE "public"."enum_home_status" AS ENUM('draft', 'published');
+   CREATE TYPE "public"."enum_submissions_status" AS ENUM('new', 'read', 'replied');
+  CREATE TYPE "public"."enum_home_status" AS ENUM('draft', 'published');
   CREATE TYPE "public"."enum__home_v_version_status" AS ENUM('draft', 'published');
   CREATE TYPE "public"."enum_site_settings_socials_platform" AS ENUM('instagram', 'linkedin', 'facebook', 'x', 'youtube', 'tiktok');
   CREATE TYPE "public"."enum_site_settings_status" AS ENUM('draft', 'published');
@@ -64,6 +65,16 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"sizes_hero_filename" varchar
   );
   
+  CREATE TABLE "submissions" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"status" "enum_submissions_status" DEFAULT 'new' NOT NULL,
+  	"name" varchar NOT NULL,
+  	"email" varchar NOT NULL,
+  	"message" varchar NOT NULL,
+  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  );
+  
   CREATE TABLE "payload_kv" (
   	"id" serial PRIMARY KEY NOT NULL,
   	"key" varchar NOT NULL,
@@ -83,7 +94,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"parent_id" integer NOT NULL,
   	"path" varchar NOT NULL,
   	"users_id" integer,
-  	"media_id" integer
+  	"media_id" integer,
+  	"submissions_id" integer
   );
   
   CREATE TABLE "payload_preferences" (
@@ -128,6 +140,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"subtitle" varchar,
   	"cta_label" varchar,
   	"cta_href" varchar,
+  	"anchor" varchar DEFAULT 'inicio',
   	"block_name" varchar
   );
   
@@ -139,6 +152,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"title" varchar,
   	"content" jsonb,
   	"image_id" integer,
+  	"anchor" varchar DEFAULT 'quienes-somos',
   	"block_name" varchar
   );
   
@@ -149,6 +163,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"id" varchar PRIMARY KEY NOT NULL,
   	"title" varchar,
   	"content" jsonb,
+  	"anchor" varchar DEFAULT 'que-hacemos',
   	"block_name" varchar
   );
   
@@ -167,6 +182,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"_path" text NOT NULL,
   	"id" varchar PRIMARY KEY NOT NULL,
   	"title" varchar,
+  	"anchor" varchar DEFAULT 'servicios',
   	"block_name" varchar
   );
   
@@ -177,6 +193,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"id" varchar PRIMARY KEY NOT NULL,
   	"title" varchar,
   	"text" jsonb,
+  	"show_form" boolean DEFAULT true,
+  	"anchor" varchar DEFAULT 'contacto',
   	"block_name" varchar
   );
   
@@ -206,6 +224,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"subtitle" varchar,
   	"cta_label" varchar,
   	"cta_href" varchar,
+  	"anchor" varchar DEFAULT 'inicio',
   	"_uuid" varchar,
   	"block_name" varchar
   );
@@ -218,6 +237,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"title" varchar,
   	"content" jsonb,
   	"image_id" integer,
+  	"anchor" varchar DEFAULT 'quienes-somos',
   	"_uuid" varchar,
   	"block_name" varchar
   );
@@ -229,6 +249,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"id" serial PRIMARY KEY NOT NULL,
   	"title" varchar,
   	"content" jsonb,
+  	"anchor" varchar DEFAULT 'que-hacemos',
   	"_uuid" varchar,
   	"block_name" varchar
   );
@@ -249,6 +270,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"_path" text NOT NULL,
   	"id" serial PRIMARY KEY NOT NULL,
   	"title" varchar,
+  	"anchor" varchar DEFAULT 'servicios',
   	"_uuid" varchar,
   	"block_name" varchar
   );
@@ -260,6 +282,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"id" serial PRIMARY KEY NOT NULL,
   	"title" varchar,
   	"text" jsonb,
+  	"show_form" boolean DEFAULT true,
+  	"anchor" varchar DEFAULT 'contacto',
   	"_uuid" varchar,
   	"block_name" varchar
   );
@@ -274,6 +298,15 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"latest" boolean
   );
   
+  CREATE TABLE "site_settings_nav" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"label" varchar,
+  	"href" varchar,
+  	"highlight" boolean DEFAULT false
+  );
+  
   CREATE TABLE "site_settings_socials" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
@@ -284,14 +317,29 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   
   CREATE TABLE "site_settings" (
   	"id" serial PRIMARY KEY NOT NULL,
+  	"brand_name" varchar,
+  	"brand_logo_id" integer,
+  	"brand_tagline" varchar,
   	"contact_email" varchar,
   	"contact_phone" varchar,
   	"contact_address" varchar,
-  	"footer_logo_id" integer,
   	"footer_copyright" varchar,
+  	"seo_title" varchar,
+  	"seo_description" varchar,
+  	"seo_image_id" integer,
   	"_status" "enum_site_settings_status" DEFAULT 'draft',
   	"updated_at" timestamp(3) with time zone,
   	"created_at" timestamp(3) with time zone
+  );
+  
+  CREATE TABLE "_site_settings_v_version_nav" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"label" varchar,
+  	"href" varchar,
+  	"highlight" boolean DEFAULT false,
+  	"_uuid" varchar
   );
   
   CREATE TABLE "_site_settings_v_version_socials" (
@@ -305,11 +353,16 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   
   CREATE TABLE "_site_settings_v" (
   	"id" serial PRIMARY KEY NOT NULL,
+  	"version_brand_name" varchar,
+  	"version_brand_logo_id" integer,
+  	"version_brand_tagline" varchar,
   	"version_contact_email" varchar,
   	"version_contact_phone" varchar,
   	"version_contact_address" varchar,
-  	"version_footer_logo_id" integer,
   	"version_footer_copyright" varchar,
+  	"version_seo_title" varchar,
+  	"version_seo_description" varchar,
+  	"version_seo_image_id" integer,
   	"version__status" "enum__site_settings_v_version_status" DEFAULT 'draft',
   	"version_updated_at" timestamp(3) with time zone,
   	"version_created_at" timestamp(3) with time zone,
@@ -322,6 +375,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."payload_locked_documents"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_users_fk" FOREIGN KEY ("users_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_media_fk" FOREIGN KEY ("media_id") REFERENCES "public"."media"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_submissions_fk" FOREIGN KEY ("submissions_id") REFERENCES "public"."submissions"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_preferences_rels" ADD CONSTRAINT "payload_preferences_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."payload_preferences"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_preferences_rels" ADD CONSTRAINT "payload_preferences_rels_users_fk" FOREIGN KEY ("users_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "home_blocks_hero_slides" ADD CONSTRAINT "home_blocks_hero_slides_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
@@ -344,10 +398,14 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "_home_v_blocks_services_items" ADD CONSTRAINT "_home_v_blocks_services_items_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_home_v_blocks_services"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_home_v_blocks_services" ADD CONSTRAINT "_home_v_blocks_services_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_home_v"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_home_v_blocks_contact" ADD CONSTRAINT "_home_v_blocks_contact_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_home_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "site_settings_nav" ADD CONSTRAINT "site_settings_nav_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."site_settings"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "site_settings_socials" ADD CONSTRAINT "site_settings_socials_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."site_settings"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "site_settings" ADD CONSTRAINT "site_settings_footer_logo_id_media_id_fk" FOREIGN KEY ("footer_logo_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "site_settings" ADD CONSTRAINT "site_settings_brand_logo_id_media_id_fk" FOREIGN KEY ("brand_logo_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "site_settings" ADD CONSTRAINT "site_settings_seo_image_id_media_id_fk" FOREIGN KEY ("seo_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_site_settings_v_version_nav" ADD CONSTRAINT "_site_settings_v_version_nav_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_site_settings_v"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_site_settings_v_version_socials" ADD CONSTRAINT "_site_settings_v_version_socials_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_site_settings_v"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_site_settings_v" ADD CONSTRAINT "_site_settings_v_version_footer_logo_id_media_id_fk" FOREIGN KEY ("version_footer_logo_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_site_settings_v" ADD CONSTRAINT "_site_settings_v_version_brand_logo_id_media_id_fk" FOREIGN KEY ("version_brand_logo_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_site_settings_v" ADD CONSTRAINT "_site_settings_v_version_seo_image_id_media_id_fk" FOREIGN KEY ("version_seo_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   CREATE INDEX "users_sessions_order_idx" ON "users_sessions" USING btree ("_order");
   CREATE INDEX "users_sessions_parent_id_idx" ON "users_sessions" USING btree ("_parent_id");
   CREATE INDEX "users_updated_at_idx" ON "users" USING btree ("updated_at");
@@ -359,6 +417,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "media_sizes_thumbnail_sizes_thumbnail_filename_idx" ON "media" USING btree ("sizes_thumbnail_filename");
   CREATE INDEX "media_sizes_card_sizes_card_filename_idx" ON "media" USING btree ("sizes_card_filename");
   CREATE INDEX "media_sizes_hero_sizes_hero_filename_idx" ON "media" USING btree ("sizes_hero_filename");
+  CREATE INDEX "submissions_updated_at_idx" ON "submissions" USING btree ("updated_at");
+  CREATE INDEX "submissions_created_at_idx" ON "submissions" USING btree ("created_at");
   CREATE UNIQUE INDEX "payload_kv_key_idx" ON "payload_kv" USING btree ("key");
   CREATE INDEX "payload_locked_documents_global_slug_idx" ON "payload_locked_documents" USING btree ("global_slug");
   CREATE INDEX "payload_locked_documents_updated_at_idx" ON "payload_locked_documents" USING btree ("updated_at");
@@ -368,6 +428,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "payload_locked_documents_rels_path_idx" ON "payload_locked_documents_rels" USING btree ("path");
   CREATE INDEX "payload_locked_documents_rels_users_id_idx" ON "payload_locked_documents_rels" USING btree ("users_id");
   CREATE INDEX "payload_locked_documents_rels_media_id_idx" ON "payload_locked_documents_rels" USING btree ("media_id");
+  CREATE INDEX "payload_locked_documents_rels_submissions_id_idx" ON "payload_locked_documents_rels" USING btree ("submissions_id");
   CREATE INDEX "payload_preferences_key_idx" ON "payload_preferences" USING btree ("key");
   CREATE INDEX "payload_preferences_updated_at_idx" ON "payload_preferences" USING btree ("updated_at");
   CREATE INDEX "payload_preferences_created_at_idx" ON "payload_preferences" USING btree ("created_at");
@@ -426,13 +487,19 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "_home_v_created_at_idx" ON "_home_v" USING btree ("created_at");
   CREATE INDEX "_home_v_updated_at_idx" ON "_home_v" USING btree ("updated_at");
   CREATE INDEX "_home_v_latest_idx" ON "_home_v" USING btree ("latest");
+  CREATE INDEX "site_settings_nav_order_idx" ON "site_settings_nav" USING btree ("_order");
+  CREATE INDEX "site_settings_nav_parent_id_idx" ON "site_settings_nav" USING btree ("_parent_id");
   CREATE INDEX "site_settings_socials_order_idx" ON "site_settings_socials" USING btree ("_order");
   CREATE INDEX "site_settings_socials_parent_id_idx" ON "site_settings_socials" USING btree ("_parent_id");
-  CREATE INDEX "site_settings_footer_footer_logo_idx" ON "site_settings" USING btree ("footer_logo_id");
+  CREATE INDEX "site_settings_brand_brand_logo_idx" ON "site_settings" USING btree ("brand_logo_id");
+  CREATE INDEX "site_settings_seo_seo_image_idx" ON "site_settings" USING btree ("seo_image_id");
   CREATE INDEX "site_settings__status_idx" ON "site_settings" USING btree ("_status");
+  CREATE INDEX "_site_settings_v_version_nav_order_idx" ON "_site_settings_v_version_nav" USING btree ("_order");
+  CREATE INDEX "_site_settings_v_version_nav_parent_id_idx" ON "_site_settings_v_version_nav" USING btree ("_parent_id");
   CREATE INDEX "_site_settings_v_version_socials_order_idx" ON "_site_settings_v_version_socials" USING btree ("_order");
   CREATE INDEX "_site_settings_v_version_socials_parent_id_idx" ON "_site_settings_v_version_socials" USING btree ("_parent_id");
-  CREATE INDEX "_site_settings_v_version_footer_version_footer_logo_idx" ON "_site_settings_v" USING btree ("version_footer_logo_id");
+  CREATE INDEX "_site_settings_v_version_brand_version_brand_logo_idx" ON "_site_settings_v" USING btree ("version_brand_logo_id");
+  CREATE INDEX "_site_settings_v_version_seo_version_seo_image_idx" ON "_site_settings_v" USING btree ("version_seo_image_id");
   CREATE INDEX "_site_settings_v_version_version__status_idx" ON "_site_settings_v" USING btree ("version__status");
   CREATE INDEX "_site_settings_v_created_at_idx" ON "_site_settings_v" USING btree ("created_at");
   CREATE INDEX "_site_settings_v_updated_at_idx" ON "_site_settings_v" USING btree ("updated_at");
@@ -444,6 +511,7 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
    DROP TABLE "users_sessions" CASCADE;
   DROP TABLE "users" CASCADE;
   DROP TABLE "media" CASCADE;
+  DROP TABLE "submissions" CASCADE;
   DROP TABLE "payload_kv" CASCADE;
   DROP TABLE "payload_locked_documents" CASCADE;
   DROP TABLE "payload_locked_documents_rels" CASCADE;
@@ -466,10 +534,13 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TABLE "_home_v_blocks_services" CASCADE;
   DROP TABLE "_home_v_blocks_contact" CASCADE;
   DROP TABLE "_home_v" CASCADE;
+  DROP TABLE "site_settings_nav" CASCADE;
   DROP TABLE "site_settings_socials" CASCADE;
   DROP TABLE "site_settings" CASCADE;
+  DROP TABLE "_site_settings_v_version_nav" CASCADE;
   DROP TABLE "_site_settings_v_version_socials" CASCADE;
   DROP TABLE "_site_settings_v" CASCADE;
+  DROP TYPE "public"."enum_submissions_status";
   DROP TYPE "public"."enum_home_status";
   DROP TYPE "public"."enum__home_v_version_status";
   DROP TYPE "public"."enum_site_settings_socials_platform";

@@ -1403,6 +1403,13 @@
           "primaryKey": false,
           "notNull": false
         },
+        "anchor": {
+          "name": "anchor",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'inicio'"
+        },
         "block_name": {
           "name": "block_name",
           "type": "varchar",
@@ -1523,6 +1530,13 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": false
+        },
+        "anchor": {
+          "name": "anchor",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'quienes-somos'"
         },
         "block_name": {
           "name": "block_name",
@@ -1666,6 +1680,13 @@
           "type": "jsonb",
           "primaryKey": false,
           "notNull": false
+        },
+        "anchor": {
+          "name": "anchor",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'que-hacemos'"
         },
         "block_name": {
           "name": "block_name",
@@ -1898,6 +1919,13 @@
           "primaryKey": false,
           "notNull": false
         },
+        "anchor": {
+          "name": "anchor",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'servicios'"
+        },
         "block_name": {
           "name": "block_name",
           "type": "varchar",
@@ -2019,6 +2047,13 @@
           "primaryKey": false,
           "notNull": false,
           "default": true
+        },
+        "anchor": {
+          "name": "anchor",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'contacto'"
         },
         "block_name": {
           "name": "block_name",
@@ -2330,6 +2365,13 @@
           "primaryKey": false,
           "notNull": false
         },
+        "anchor": {
+          "name": "anchor",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'inicio'"
+        },
         "_uuid": {
           "name": "_uuid",
           "type": "varchar",
@@ -2456,6 +2498,13 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": false
+        },
+        "anchor": {
+          "name": "anchor",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'quienes-somos'"
         },
         "_uuid": {
           "name": "_uuid",
@@ -2605,6 +2654,13 @@
           "type": "jsonb",
           "primaryKey": false,
           "notNull": false
+        },
+        "anchor": {
+          "name": "anchor",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'que-hacemos'"
         },
         "_uuid": {
           "name": "_uuid",
@@ -2849,6 +2905,13 @@
           "primaryKey": false,
           "notNull": false
         },
+        "anchor": {
+          "name": "anchor",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'servicios'"
+        },
         "_uuid": {
           "name": "_uuid",
           "type": "varchar",
@@ -2976,6 +3039,13 @@
           "primaryKey": false,
           "notNull": false,
           "default": true
+        },
+        "anchor": {
+          "name": "anchor",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'contacto'"
         },
         "_uuid": {
           "name": "_uuid",
@@ -3178,6 +3248,101 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.site_settings_nav": {
+      "name": "site_settings_nav",
+      "schema": "",
+      "columns": {
+        "_order": {
+          "name": "_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "label": {
+          "name": "label",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "href": {
+          "name": "href",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "highlight": {
+          "name": "highlight",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        }
+      },
+      "indexes": {
+        "site_settings_nav_order_idx": {
+          "name": "site_settings_nav_order_idx",
+          "columns": [
+            {
+              "expression": "_order",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "site_settings_nav_parent_id_idx": {
+          "name": "site_settings_nav_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "site_settings_nav_parent_id_fk": {
+          "name": "site_settings_nav_parent_id_fk",
+          "tableFrom": "site_settings_nav",
+          "tableTo": "site_settings",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.site_settings_socials": {
       "name": "site_settings_socials",
       "schema": "",
@@ -3277,6 +3442,24 @@
           "primaryKey": true,
           "notNull": true
         },
+        "brand_name": {
+          "name": "brand_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "brand_logo_id": {
+          "name": "brand_logo_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "brand_tagline": {
+          "name": "brand_tagline",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
         "contact_email": {
           "name": "contact_email",
           "type": "varchar",
@@ -3295,15 +3478,27 @@
           "primaryKey": false,
           "notNull": false
         },
-        "footer_logo_id": {
-          "name": "footer_logo_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
         "footer_copyright": {
           "name": "footer_copyright",
           "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_title": {
+          "name": "seo_title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_description": {
+          "name": "seo_description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_image_id": {
+          "name": "seo_image_id",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
@@ -3329,11 +3524,26 @@
         }
       },
       "indexes": {
-        "site_settings_footer_footer_logo_idx": {
-          "name": "site_settings_footer_footer_logo_idx",
+        "site_settings_brand_brand_logo_idx": {
+          "name": "site_settings_brand_brand_logo_idx",
           "columns": [
             {
-              "expression": "footer_logo_id",
+              "expression": "brand_logo_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "site_settings_seo_seo_image_idx": {
+          "name": "site_settings_seo_seo_image_idx",
+          "columns": [
+            {
+              "expression": "seo_image_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -3361,17 +3571,131 @@
         }
       },
       "foreignKeys": {
-        "site_settings_footer_logo_id_media_id_fk": {
-          "name": "site_settings_footer_logo_id_media_id_fk",
+        "site_settings_brand_logo_id_media_id_fk": {
+          "name": "site_settings_brand_logo_id_media_id_fk",
           "tableFrom": "site_settings",
           "tableTo": "media",
           "columnsFrom": [
-            "footer_logo_id"
+            "brand_logo_id"
           ],
           "columnsTo": [
             "id"
           ],
           "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "site_settings_seo_image_id_media_id_fk": {
+          "name": "site_settings_seo_image_id_media_id_fk",
+          "tableFrom": "site_settings",
+          "tableTo": "media",
+          "columnsFrom": [
+            "seo_image_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public._site_settings_v_version_nav": {
+      "name": "_site_settings_v_version_nav",
+      "schema": "",
+      "columns": {
+        "_order": {
+          "name": "_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "label": {
+          "name": "label",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "href": {
+          "name": "href",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "highlight": {
+          "name": "highlight",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "_uuid": {
+          "name": "_uuid",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "_site_settings_v_version_nav_order_idx": {
+          "name": "_site_settings_v_version_nav_order_idx",
+          "columns": [
+            {
+              "expression": "_order",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "_site_settings_v_version_nav_parent_id_idx": {
+          "name": "_site_settings_v_version_nav_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "_site_settings_v_version_nav_parent_id_fk": {
+          "name": "_site_settings_v_version_nav_parent_id_fk",
+          "tableFrom": "_site_settings_v_version_nav",
+          "tableTo": "_site_settings_v",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -3486,6 +3810,24 @@
           "primaryKey": true,
           "notNull": true
         },
+        "version_brand_name": {
+          "name": "version_brand_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_brand_logo_id": {
+          "name": "version_brand_logo_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_brand_tagline": {
+          "name": "version_brand_tagline",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
         "version_contact_email": {
           "name": "version_contact_email",
           "type": "varchar",
@@ -3504,15 +3846,27 @@
           "primaryKey": false,
           "notNull": false
         },
-        "version_footer_logo_id": {
-          "name": "version_footer_logo_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
         "version_footer_copyright": {
           "name": "version_footer_copyright",
           "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_seo_title": {
+          "name": "version_seo_title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_seo_description": {
+          "name": "version_seo_description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_seo_image_id": {
+          "name": "version_seo_image_id",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
@@ -3558,11 +3912,26 @@
         }
       },
       "indexes": {
-        "_site_settings_v_version_footer_version_footer_logo_idx": {
-          "name": "_site_settings_v_version_footer_version_footer_logo_idx",
+        "_site_settings_v_version_brand_version_brand_logo_idx": {
+          "name": "_site_settings_v_version_brand_version_brand_logo_idx",
           "columns": [
             {
-              "expression": "version_footer_logo_id",
+              "expression": "version_brand_logo_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "_site_settings_v_version_seo_version_seo_image_idx": {
+          "name": "_site_settings_v_version_seo_version_seo_image_idx",
+          "columns": [
+            {
+              "expression": "version_seo_image_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -3635,12 +4004,25 @@
         }
       },
       "foreignKeys": {
-        "_site_settings_v_version_footer_logo_id_media_id_fk": {
-          "name": "_site_settings_v_version_footer_logo_id_media_id_fk",
+        "_site_settings_v_version_brand_logo_id_media_id_fk": {
+          "name": "_site_settings_v_version_brand_logo_id_media_id_fk",
           "tableFrom": "_site_settings_v",
           "tableTo": "media",
           "columnsFrom": [
-            "version_footer_logo_id"
+            "version_brand_logo_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "_site_settings_v_version_seo_image_id_media_id_fk": {
+          "name": "_site_settings_v_version_seo_image_id_media_id_fk",
+          "tableFrom": "_site_settings_v",
+          "tableTo": "media",
+          "columnsFrom": [
+            "version_seo_image_id"
           ],
           "columnsTo": [
             "id"
@@ -3733,6 +4115,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "165006c8-fd03-4fa4-8405-0c0a8afa66b6",
+  "id": "07bd4840-7e1b-4518-a923-e3d44060ec02",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }

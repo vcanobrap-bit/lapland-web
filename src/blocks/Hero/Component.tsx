@@ -5,11 +5,13 @@ import { resolveMedia, toImageSrc } from '@/lib/media'
 
 import { HeroSlider, type HeroSlide } from './HeroSlider'
 
+type HeroProps = HeroBlock & { anchorId: string }
+
 /**
  * Server Component. El título, el subtítulo y el botón no necesitan JavaScript,
  * así que se renderizan en el servidor; al cliente solo baja el slider.
  */
-export function Hero({ cta, slides, subtitle, title }: HeroBlock) {
+export function Hero({ anchorId, cta, slides, subtitle, title }: HeroProps) {
   // Cada slide se reduce a lo que el slider realmente usa: mandar el documento
   // de Media completo infla el payload de RSC sin ningún beneficio.
   const clientSlides: HeroSlide[] = (slides ?? []).flatMap((slide, position) => {
@@ -32,7 +34,7 @@ export function Hero({ cta, slides, subtitle, title }: HeroBlock) {
   const hasCta = Boolean(cta?.label && cta.href)
 
   return (
-    <section className="pt-24 pb-16 md:pt-32">
+    <section id={anchorId} className="pt-24 pb-16 md:pt-32">
       <Container className="mb-14">
         <h1 className="text-ink max-w-3xl text-4xl font-medium tracking-tight text-balance md:text-6xl">
           {title}

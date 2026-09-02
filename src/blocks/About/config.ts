@@ -1,5 +1,6 @@
 import type { Block } from 'payload'
 
+import { anchor } from '@/fields/anchor'
 import { richTextContent } from '@/fields/richTextContent'
 
 export const AboutBlock: Block = {
@@ -21,5 +22,6 @@ export const AboutBlock: Block = {
       label: 'Imagen',
       admin: { description: 'Sin imagen, el texto ocupa el ancho completo.' },
     },
+    anchor('quienes-somos'),
   ],
 }

@@ -2,6 +2,8 @@ import type { ComponentType } from 'react'
 
 import type { Home, SiteSetting } from '@/payload-types'
 
+import { resolveAnchors } from '@/lib/anchors'
+
 import { About } from './About/Component'
 import { Contact } from './Contact/Component'
 import { Hero } from './Hero/Component'
@@ -15,7 +17,11 @@ type BlockType = LayoutBlock['blockType']
  * Datos del sitio que cualquier bloque puede necesitar. Se pasan por props
  * desde la página: ningún bloque consulta Payload por su cuenta.
  */
-type SharedBlockProps = { settings: SiteSetting }
+type SharedBlockProps = {
+  settings: SiteSetting
+  /** Ancla ya resuelta y única en la página. La calcula RenderBlocks. */
+  anchorId: string
+}
 
 /**
  * Un componente por cada tipo de bloque del CMS.
@@ -34,13 +40,17 @@ const BLOCK_COMPONENTS: {
   contact: Contact,
 }
 
-type RenderBlocksProps = SharedBlockProps & {
+type RenderBlocksProps = {
   blocks: LayoutBlock[] | null | undefined
+  settings: SiteSetting
 }
 
 /** Traduce la lista de bloques del CMS a componentes. */
 export function RenderBlocks({ blocks, settings }: RenderBlocksProps) {
   if (!blocks?.length) return null
+
+  // Se resuelven de una sola vez para poder garantizar que no se repitan.
+  const anchors = resolveAnchors(blocks)
 
   return (
     <>
@@ -57,6 +67,7 @@ export function RenderBlocks({ blocks, settings }: RenderBlocksProps) {
             key={block.id ?? `${block.blockType}-${position}`}
             {...block}
             settings={settings}
+            anchorId={anchors[position] ?? block.blockType}
           />
         )
       })}

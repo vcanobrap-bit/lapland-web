@@ -6,9 +6,10 @@ import { revalidateGlobal } from '@/globals/hooks/revalidateGlobal'
 import { previewUrl } from '@/lib/preview'
 
 /**
- * Datos transversales al sitio. Viven acá y no dentro de una página porque
- * se reutilizan en cualquier sección: el cliente actualiza su teléfono en un
- * solo lugar y se refleja en el footer y en la sección de contacto.
+ * Datos transversales al sitio: marca, navegación, contacto, footer, redes y
+ * SEO. Viven acá y no dentro de una página porque se reutilizan en cualquier
+ * sección; el cliente actualiza su teléfono en un solo lugar y se refleja en el
+ * footer y en la sección de contacto.
  */
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
@@ -29,6 +30,63 @@ export const SiteSettings: GlobalConfig = {
     {
       type: 'tabs',
       tabs: [
+        {
+          label: 'Marca',
+          fields: [
+            {
+              name: 'brand',
+              type: 'group',
+              label: 'Marca',
+              fields: [
+                {
+                  name: 'name',
+                  type: 'text',
+                  label: 'Nombre',
+                  required: true,
+                  admin: { description: 'Se usa como texto alternativo y en el título del sitio.' },
+                },
+                {
+                  name: 'logo',
+                  type: 'upload',
+                  relationTo: 'media',
+                  label: 'Logo',
+                  admin: { description: 'Se usa en el encabezado y en el pie. Idealmente SVG.' },
+                },
+                {
+                  name: 'tagline',
+                  type: 'text',
+                  label: 'Bajada',
+                  admin: { description: 'Frase corta que acompaña la marca en el pie.' },
+                },
+              ],
+            },
+          ],
+        },
+        {
+          label: 'Navegación',
+          fields: [
+            {
+              name: 'nav',
+              type: 'array',
+              label: 'Menú',
+              labels: { singular: 'Enlace', plural: 'Enlaces' },
+              admin: {
+                description:
+                  'El destino es el ancla de una sección (#servicios) o una URL completa. El ancla de cada sección se define en el bloque correspondiente.',
+              },
+              fields: [
+                { name: 'label', type: 'text', label: 'Texto', required: true },
+                { name: 'href', type: 'text', label: 'Destino', required: true },
+                {
+                  name: 'highlight',
+                  type: 'checkbox',
+                  label: 'Mostrar como botón',
+                  defaultValue: false,
+                },
+              ],
+            },
+          ],
+        },
         {
           label: 'Contacto',
           fields: [
@@ -52,12 +110,6 @@ export const SiteSettings: GlobalConfig = {
               type: 'group',
               label: 'Pie de página',
               fields: [
-                {
-                  name: 'logo',
-                  type: 'upload',
-                  relationTo: 'media',
-                  label: 'Logo',
-                },
                 {
                   name: 'copyright',
                   type: 'text',
@@ -91,11 +143,45 @@ export const SiteSettings: GlobalConfig = {
                     { label: 'TikTok', value: 'tiktok' },
                   ],
                 },
+                { name: 'url', type: 'text', label: 'Enlace', required: true },
+              ],
+            },
+          ],
+        },
+        {
+          label: 'SEO',
+          description:
+            'Es lo que se ve cuando alguien comparte el enlace por WhatsApp, LinkedIn o en un buscador.',
+          fields: [
+            {
+              name: 'seo',
+              type: 'group',
+              label: 'SEO',
+              fields: [
                 {
-                  name: 'url',
+                  name: 'title',
                   type: 'text',
-                  label: 'Enlace',
-                  required: true,
+                  label: 'Título',
+                  admin: {
+                    description:
+                      'Hasta unos 60 caracteres. Si se deja vacío, usa el nombre de la marca.',
+                  },
+                },
+                {
+                  name: 'description',
+                  type: 'textarea',
+                  label: 'Descripción',
+                  maxLength: 200,
+                  admin: {
+                    description: 'Entre 120 y 160 caracteres es lo que muestran los buscadores.',
+                  },
+                },
+                {
+                  name: 'image',
+                  type: 'upload',
+                  relationTo: 'media',
+                  label: 'Imagen para compartir',
+                  admin: { description: 'Proporción 1200 × 630 px.' },
                 },
               ],
             },

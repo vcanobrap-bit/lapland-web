@@ -20,7 +20,7 @@ const PLATFORM_LABELS: Record<SocialPlatform, string> = {
  * ocurre en el layout, no acá.
  */
 export function Footer({ settings }: { settings: SiteSetting }) {
-  const { contact, footer, socials } = settings
+  const { brand, contact, footer, socials } = settings
   const year = new Date().getFullYear()
 
   // El global puede estar sin publicar todavía: los tipos generados marcan
@@ -31,9 +31,13 @@ export function Footer({ settings }: { settings: SiteSetting }) {
     <footer className="border-line mt-24 border-t py-16">
       <Container className="flex flex-col gap-12 md:flex-row md:justify-between">
         <div className="space-y-6">
-          {footer?.logo ? (
-            <MediaImage media={footer.logo} className="h-8 w-auto" sizes="200px" />
-          ) : null}
+          {brand?.logo ? (
+            <MediaImage media={brand.logo} className="h-8 w-auto" sizes="200px" />
+          ) : (
+            <p className="text-ink text-base font-medium tracking-tight">{brand?.name}</p>
+          )}
+
+          {brand?.tagline ? <p className="text-muted text-sm">{brand.tagline}</p> : null}
 
           <address className="text-muted space-y-1 text-sm not-italic">
             {email ? (

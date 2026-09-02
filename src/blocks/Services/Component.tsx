@@ -4,12 +4,14 @@ import { RichText } from '@/components/RichText'
 import { MediaImage } from '@/components/ui/MediaImage'
 import { Section } from '@/components/ui/Section'
 
+type ServicesProps = ServicesBlock & { anchorId: string }
+
 /** Server Component: solo obtiene y muestra contenido, sin estado ni interacción. */
-export function Services({ items, title }: ServicesBlock) {
+export function Services({ anchorId, items, title }: ServicesProps) {
   if (!items?.length) return null
 
   return (
-    <Section id="servicios">
+    <Section id={anchorId}>
       <h2 className="text-ink text-3xl font-medium tracking-tight text-balance md:text-4xl">
         {title}
       </h2>

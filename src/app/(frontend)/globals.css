@@ -17,11 +17,22 @@
   /* Ritmo vertical: el "mucho espacio en blanco" del brief, en una sola escala. */
   --spacing-section: 6rem;
   --spacing-section-lg: 9rem;
+
+  /* Alto del encabezado fijo. Lo usan el header y el desplazamiento a anclas. */
+  --header-height: 4rem;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
+  }
+
+  /*
+   * Con el encabezado fijo, saltar a un ancla dejaba el título tapado debajo.
+   * Es el detalle que hace sentir rota una navegación por anclas.
+   */
+  [id] {
+    scroll-margin-top: calc(var(--header-height) + 1rem);
   }
 
   body {

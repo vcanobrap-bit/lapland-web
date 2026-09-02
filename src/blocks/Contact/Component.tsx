@@ -5,7 +5,7 @@ import { Section } from '@/components/ui/Section'
 
 import { ContactForm } from './ContactForm'
 
-type ContactProps = ContactBlock & { settings: SiteSetting }
+type ContactProps = ContactBlock & { settings: SiteSetting; anchorId: string }
 
 /**
  * Server Component. Los datos de contacto no son campos de este bloque: vienen
@@ -15,11 +15,11 @@ type ContactProps = ContactBlock & { settings: SiteSetting }
  *
  * Lo único que cruza al cliente es el formulario, y solo cuando está activado.
  */
-export function Contact({ settings, showForm, text, title }: ContactProps) {
+export function Contact({ anchorId, settings, showForm, text, title }: ContactProps) {
   const { address, email, phone } = settings.contact ?? {}
 
   return (
-    <Section id="contacto" tone="subtle">
+    <Section id={anchorId} tone="subtle">
       <div className="grid gap-12 md:grid-cols-2 md:gap-16">
         <div>
           <h2 className="text-ink text-3xl font-medium tracking-tight text-balance md:text-4xl">

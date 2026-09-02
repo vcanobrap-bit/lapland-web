@@ -455,6 +455,10 @@ export interface HeroBlock {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Se enlaza como #ancla. Si se deja vacío, se genera una automáticamente.
+   */
+  anchor?: string | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'hero';
@@ -484,6 +488,10 @@ export interface AboutBlock {
    * Sin imagen, el texto ocupa el ancho completo.
    */
   image?: (number | null) | Media;
+  /**
+   * Se enlaza como #ancla. Si se deja vacío, se genera una automáticamente.
+   */
+  anchor?: string | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'about';
@@ -509,6 +517,10 @@ export interface WhatWeDoBlock {
     };
     [k: string]: unknown;
   };
+  /**
+   * Se enlaza como #ancla. Si se deja vacío, se genera una automáticamente.
+   */
+  anchor?: string | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'whatWeDo';
@@ -544,6 +556,10 @@ export interface ServicesBlock {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Se enlaza como #ancla. Si se deja vacío, se genera una automáticamente.
+   */
+  anchor?: string | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'services';
@@ -576,6 +592,10 @@ export interface ContactBlock {
    * Los mensajes recibidos aparecen en Contenido → Mensajes.
    */
   showForm?: boolean | null;
+  /**
+   * Se enlaza como #ancla. Si se deja vacío, se genera una automáticamente.
+   */
+  anchor?: string | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'contact';
@@ -586,13 +606,37 @@ export interface ContactBlock {
  */
 export interface SiteSetting {
   id: number;
+  brand: {
+    /**
+     * Se usa como texto alternativo y en el título del sitio.
+     */
+    name: string;
+    /**
+     * Se usa en el encabezado y en el pie. Idealmente SVG.
+     */
+    logo?: (number | null) | Media;
+    /**
+     * Frase corta que acompaña la marca en el pie.
+     */
+    tagline?: string | null;
+  };
+  /**
+   * El destino es el ancla de una sección (#servicios) o una URL completa. El ancla de cada sección se define en el bloque correspondiente.
+   */
+  nav?:
+    | {
+        label: string;
+        href: string;
+        highlight?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
   contact: {
     email: string;
     phone?: string | null;
     address?: string | null;
   };
   footer?: {
-    logo?: (number | null) | Media;
     /**
      * El año se agrega automáticamente al renderizar.
      */
@@ -605,6 +649,20 @@ export interface SiteSetting {
         id?: string | null;
       }[]
     | null;
+  seo?: {
+    /**
+     * Hasta unos 60 caracteres. Si se deja vacío, usa el nombre de la marca.
+     */
+    title?: string | null;
+    /**
+     * Entre 120 y 160 caracteres es lo que muestran los buscadores.
+     */
+    description?: string | null;
+    /**
+     * Proporción 1200 × 630 px.
+     */
+    image?: (number | null) | Media;
+  };
   _status?: ('draft' | 'published') | null;
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -649,6 +707,7 @@ export interface HeroBlockSelect<T extends boolean = true> {
         text?: T;
         id?: T;
       };
+  anchor?: T;
   id?: T;
   blockName?: T;
 }
@@ -660,6 +719,7 @@ export interface AboutBlockSelect<T extends boolean = true> {
   title?: T;
   content?: T;
   image?: T;
+  anchor?: T;
   id?: T;
   blockName?: T;
 }
@@ -670,6 +730,7 @@ export interface AboutBlockSelect<T extends boolean = true> {
 export interface WhatWeDoBlockSelect<T extends boolean = true> {
   title?: T;
   content?: T;
+  anchor?: T;
   id?: T;
   blockName?: T;
 }
@@ -687,6 +748,7 @@ export interface ServicesBlockSelect<T extends boolean = true> {
         description?: T;
         id?: T;
       };
+  anchor?: T;
   id?: T;
   blockName?: T;
 }
@@ -698,6 +760,7 @@ export interface ContactBlockSelect<T extends boolean = true> {
   title?: T;
   text?: T;
   showForm?: T;
+  anchor?: T;
   id?: T;
   blockName?: T;
 }
@@ -706,6 +769,21 @@ export interface ContactBlockSelect<T extends boolean = true> {
  * via the `definition` "site-settings_select".
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
+  brand?:
+    | T
+    | {
+        name?: T;
+        logo?: T;
+        tagline?: T;
+      };
+  nav?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        highlight?: T;
+        id?: T;
+      };
   contact?:
     | T
     | {
@@ -716,7 +794,6 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   footer?:
     | T
     | {
-        logo?: T;
         copyright?: T;
       };
   socials?:
@@ -725,6 +802,13 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         platform?: T;
         url?: T;
         id?: T;
+      };
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
       };
   _status?: T;
   updatedAt?: T;

@@ -6,12 +6,14 @@ import { MediaImage } from '@/components/ui/MediaImage'
 import { cn } from '@/lib/cn'
 import { resolveMedia } from '@/lib/media'
 
+type AboutProps = AboutBlock & { anchorId: string }
+
 /** Server Component: solo obtiene y muestra contenido, sin estado ni interacción. */
-export function About({ content, image, title }: AboutBlock) {
+export function About({ anchorId, content, image, title }: AboutProps) {
   const media = resolveMedia(image)
 
   return (
-    <Section id="quienes-somos">
+    <Section id={anchorId}>
       <div className={cn('grid gap-12', media && 'md:grid-cols-2 md:items-center md:gap-16')}>
         <div className={cn(!media && 'max-w-3xl')}>
           <h2 className="text-ink text-3xl font-medium tracking-tight text-balance md:text-4xl">

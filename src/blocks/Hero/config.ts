@@ -1,5 +1,6 @@
 import type { Block } from 'payload'
 
+import { anchor } from '@/fields/anchor'
 import { link } from '@/fields/link'
 
 export const HeroBlock: Block = {
@@ -42,5 +43,6 @@ export const HeroBlock: Block = {
         { name: 'text', type: 'textarea', label: 'Texto (opcional)' },
       ],
     },
+    anchor('inicio'),
   ],
 }

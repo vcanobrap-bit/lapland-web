@@ -1,5 +1,6 @@
 import type { Block } from 'payload'
 
+import { anchor } from '@/fields/anchor'
 import { richTextContent } from '@/fields/richTextContent'
 
 export const ContactBlock: Block = {
@@ -27,5 +28,6 @@ export const ContactBlock: Block = {
         description: 'Los mensajes recibidos aparecen en Contenido → Mensajes.',
       },
     },
+    anchor('contacto'),
   ],
 }

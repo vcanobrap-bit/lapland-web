@@ -1,5 +1,6 @@
 import type { Block } from 'payload'
 
+import { anchor } from '@/fields/anchor'
 import { richTextContent } from '@/fields/richTextContent'
 
 export const ServicesBlock: Block = {
@@ -37,5 +38,6 @@ export const ServicesBlock: Block = {
         richTextContent({ name: 'description', label: 'Descripción', required: true }),
       ],
     },
+    anchor('servicios'),
   ],
 }
