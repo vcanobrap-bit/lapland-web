@@ -10,6 +10,9 @@ const config = [
       '.next/**',
       'node_modules/**',
       'src/payload-types.ts',
+      // Generadas por `payload migrate:create`. El gate real es `payload migrate`
+      // en el build, que falla ruidosamente si una migración está rota.
+      'migrations/**',
       'src/app/(payload)/**',
       '.agents/**',
       '.claude/**',
