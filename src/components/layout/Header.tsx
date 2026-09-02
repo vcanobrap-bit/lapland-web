@@ -17,13 +17,13 @@ export function Header({ settings }: { settings: SiteSetting }) {
   const items = nav ?? []
 
   return (
-    <header className="border-line/70 bg-surface/85 sticky top-0 z-50 border-b backdrop-blur-sm">
+    <header className="border-fog/60 bg-surface/90 sticky top-0 z-50 border-b backdrop-blur-md">
       <Container className="flex h-(--header-height) items-center justify-between gap-6">
         <Link href="/" className="flex items-center gap-3" aria-label={brand?.name ?? 'Inicio'}>
           {brand?.logo ? (
             <MediaImage media={brand.logo} sizes="200px" className="h-7 w-auto" />
           ) : (
-            <span className="text-ink text-base font-medium tracking-tight">{brand?.name}</span>
+            <span className="font-editorial text-h4 text-ink">{brand?.name}</span>
           )}
         </Link>
 
@@ -35,10 +35,10 @@ export function Header({ settings }: { settings: SiteSetting }) {
                   key={item.id ?? `${item.label}-${item.href}`}
                   href={item.href}
                   className={cn(
-                    'text-sm transition-colors',
+                    'font-ui text-body-sm transition-colors',
                     item.highlight
-                      ? 'bg-ink rounded-full px-5 py-2.5 font-medium text-white hover:opacity-90'
-                      : 'text-muted hover:text-ink',
+                      ? 'bg-anchor text-on-anchor rounded-button px-5 py-2.5 font-medium hover:opacity-88'
+                      : 'text-ink/70 hover:text-ink',
                   )}
                 >
                   {item.label}

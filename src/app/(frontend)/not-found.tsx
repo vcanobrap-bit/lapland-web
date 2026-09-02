@@ -1,5 +1,4 @@
-import Link from 'next/link'
-
+import { Button } from '@/components/ui/Button'
 import { Container } from '@/components/ui/Container'
 
 /**
@@ -9,19 +8,14 @@ import { Container } from '@/components/ui/Container'
 export default function NotFound() {
   return (
     <Container className="flex min-h-[60vh] flex-col justify-center py-24" width="narrow">
-      <p className="text-muted text-sm tracking-wide uppercase">Error 404</p>
-      <h1 className="text-ink mt-3 text-3xl font-medium tracking-tight text-balance md:text-4xl">
-        No encontramos esta página
-      </h1>
-      <p className="text-muted mt-4">
+      <p className="text-caption text-ink/50 uppercase">Error 404</p>
+      <h1 className="font-editorial text-h1 mt-4 text-balance">No encontramos esta página</h1>
+      <p className="text-body-lg text-ink/75 mt-6">
         Puede que el enlace esté mal escrito o que la página ya no exista.
       </p>
-      <Link
-        href="/"
-        className="bg-ink mt-10 inline-flex w-fit items-center rounded-full px-6 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90"
-      >
+      <Button href="/" className="mt-10 w-fit">
         Volver al inicio
-      </Link>
+      </Button>
     </Container>
   )
 }

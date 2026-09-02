@@ -28,18 +28,20 @@ export function Footer({ settings }: { settings: SiteSetting }) {
   const email = contact?.email
 
   return (
-    <footer className="border-line mt-24 border-t py-16">
+    <footer className="border-fog bg-surface mt-section border-t py-16">
       <Container className="flex flex-col gap-12 md:flex-row md:justify-between">
         <div className="space-y-6">
           {brand?.logo ? (
             <MediaImage media={brand.logo} className="h-8 w-auto" sizes="200px" />
           ) : (
-            <p className="text-ink text-base font-medium tracking-tight">{brand?.name}</p>
+            <p className="font-editorial text-h4 text-ink">{brand?.name}</p>
           )}
 
-          {brand?.tagline ? <p className="text-muted text-sm">{brand.tagline}</p> : null}
+          {brand?.tagline ? (
+            <p className="text-ink/60 text-body-sm max-w-sm">{brand.tagline}</p>
+          ) : null}
 
-          <address className="text-muted space-y-1 text-sm not-italic">
+          <address className="text-ink/70 text-body-sm space-y-1 not-italic">
             {email ? (
               <p>
                 <a href={`mailto:${email}`} className="hover:text-ink transition-colors">
@@ -63,14 +65,14 @@ export function Footer({ settings }: { settings: SiteSetting }) {
 
         <div className="flex flex-col gap-6 md:items-end">
           {socials?.length ? (
-            <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+            <ul className="font-ui text-body-sm flex flex-wrap gap-x-6 gap-y-2">
               {socials.map((social) => (
                 <li key={social.id ?? social.url}>
                   <a
                     href={social.url}
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="text-muted hover:text-ink transition-colors"
+                    className="text-ink/70 hover:text-ink transition-colors"
                   >
                     {PLATFORM_LABELS[social.platform]}
                   </a>
@@ -80,7 +82,7 @@ export function Footer({ settings }: { settings: SiteSetting }) {
           ) : null}
 
           {footer?.copyright ? (
-            <p className="text-muted text-sm">
+            <p className="text-ink/60 text-body-sm max-w-sm">
               © {year} {footer.copyright}
             </p>
           ) : null}

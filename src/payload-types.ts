@@ -459,6 +459,10 @@ export interface HeroBlock {
    * Se enlaza como #ancla. Si se deja vacío, se genera una automáticamente.
    */
   anchor?: string | null;
+  /**
+   * El fondo oscuro es un recurso de énfasis: una o dos secciones en toda la página. Si se usa en todas, deja de destacar ninguna.
+   */
+  surface?: ('primary' | 'anchor') | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'hero';
@@ -492,6 +496,10 @@ export interface AboutBlock {
    * Se enlaza como #ancla. Si se deja vacío, se genera una automáticamente.
    */
   anchor?: string | null;
+  /**
+   * El fondo oscuro es un recurso de énfasis: una o dos secciones en toda la página. Si se usa en todas, deja de destacar ninguna.
+   */
+  surface?: ('primary' | 'anchor') | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'about';
@@ -535,6 +543,10 @@ export interface StatsBlock {
    * Se enlaza como #ancla. Si se deja vacío, se genera una automáticamente.
    */
   anchor?: string | null;
+  /**
+   * El fondo oscuro es un recurso de énfasis: una o dos secciones en toda la página. Si se usa en todas, deja de destacar ninguna.
+   */
+  surface?: ('primary' | 'anchor') | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'stats';
@@ -564,6 +576,10 @@ export interface WhatWeDoBlock {
    * Se enlaza como #ancla. Si se deja vacío, se genera una automáticamente.
    */
   anchor?: string | null;
+  /**
+   * El fondo oscuro es un recurso de énfasis: una o dos secciones en toda la página. Si se usa en todas, deja de destacar ninguna.
+   */
+  surface?: ('primary' | 'anchor') | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'whatWeDo';
@@ -603,6 +619,10 @@ export interface ServicesBlock {
    * Se enlaza como #ancla. Si se deja vacío, se genera una automáticamente.
    */
   anchor?: string | null;
+  /**
+   * El fondo oscuro es un recurso de énfasis: una o dos secciones en toda la página. Si se usa en todas, deja de destacar ninguna.
+   */
+  surface?: ('primary' | 'anchor') | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'services';
@@ -641,6 +661,10 @@ export interface ListBlock {
    * Se enlaza como #ancla. Si se deja vacío, se genera una automáticamente.
    */
   anchor?: string | null;
+  /**
+   * El fondo oscuro es un recurso de énfasis: una o dos secciones en toda la página. Si se usa en todas, deja de destacar ninguna.
+   */
+  surface?: ('primary' | 'anchor') | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'list';
@@ -677,6 +701,10 @@ export interface ContactBlock {
    * Se enlaza como #ancla. Si se deja vacío, se genera una automáticamente.
    */
   anchor?: string | null;
+  /**
+   * El fondo oscuro es un recurso de énfasis: una o dos secciones en toda la página. Si se usa en todas, deja de destacar ninguna.
+   */
+  surface?: ('primary' | 'anchor') | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'contact';
@@ -791,6 +819,7 @@ export interface HeroBlockSelect<T extends boolean = true> {
         id?: T;
       };
   anchor?: T;
+  surface?: T;
   id?: T;
   blockName?: T;
 }
@@ -803,6 +832,7 @@ export interface AboutBlockSelect<T extends boolean = true> {
   content?: T;
   image?: T;
   anchor?: T;
+  surface?: T;
   id?: T;
   blockName?: T;
 }
@@ -822,6 +852,7 @@ export interface StatsBlockSelect<T extends boolean = true> {
         id?: T;
       };
   anchor?: T;
+  surface?: T;
   id?: T;
   blockName?: T;
 }
@@ -833,6 +864,7 @@ export interface WhatWeDoBlockSelect<T extends boolean = true> {
   title?: T;
   content?: T;
   anchor?: T;
+  surface?: T;
   id?: T;
   blockName?: T;
 }
@@ -851,6 +883,7 @@ export interface ServicesBlockSelect<T extends boolean = true> {
         id?: T;
       };
   anchor?: T;
+  surface?: T;
   id?: T;
   blockName?: T;
 }
@@ -868,6 +901,7 @@ export interface ListBlockSelect<T extends boolean = true> {
         id?: T;
       };
   anchor?: T;
+  surface?: T;
   id?: T;
   blockName?: T;
 }
@@ -880,6 +914,7 @@ export interface ContactBlockSelect<T extends boolean = true> {
   text?: T;
   showForm?: T;
   anchor?: T;
+  surface?: T;
   id?: T;
   blockName?: T;
 }

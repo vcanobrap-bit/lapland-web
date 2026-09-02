@@ -1,6 +1,7 @@
 import type { Block } from 'payload'
 
 import { anchor } from '@/fields/anchor'
+import { surface } from '@/fields/surface'
 import { richTextContent } from '@/fields/richTextContent'
 
 export const StatsBlock: Block = {
@@ -35,5 +36,6 @@ export const StatsBlock: Block = {
       ],
     },
     anchor('datos'),
+    surface(),
   ],
 }

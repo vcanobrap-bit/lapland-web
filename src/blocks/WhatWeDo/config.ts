@@ -1,6 +1,7 @@
 import type { Block } from 'payload'
 
 import { anchor } from '@/fields/anchor'
+import { surface } from '@/fields/surface'
 import { richTextContent } from '@/fields/richTextContent'
 
 export const WhatWeDoBlock: Block = {
@@ -16,5 +17,6 @@ export const WhatWeDoBlock: Block = {
     },
     richTextContent({ required: true }),
     anchor('que-hacemos'),
+    surface(),
   ],
 }

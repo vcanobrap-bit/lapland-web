@@ -23,8 +23,6 @@ type SharedBlockProps = {
   settings: SiteSetting
   /** Ancla ya resuelta y única en la página. La calcula RenderBlocks. */
   anchorId: string
-  /** Fondo alternado. Lo decide la posición, no el tipo de bloque. */
-  tone: 'default' | 'subtle'
 }
 
 /**
@@ -58,18 +56,9 @@ export function RenderBlocks({ blocks, settings }: RenderBlocksProps) {
   // Se resuelven de una sola vez para poder garantizar que no se repitan.
   const anchors = resolveAnchors(blocks)
 
-  // El fondo alterna a lo largo de la página. Si el tono lo fijara cada tipo de
-  // bloque, dos secciones grises consecutivas se fundirían en una sola mancha
-  // apenas el cliente reordene las secciones.
-  let toneIndex = 0
-
   return (
     <>
       {blocks.map((block, position) => {
-        // El hero abre la página y siempre va sobre el fondo base.
-        const tone =
-          block.blockType === 'hero' ? 'default' : toneIndex++ % 2 === 1 ? 'subtle' : 'default'
-
         // Indexar el registro con una unión pierde la correspondencia entre el
         // blockType y sus props. El mapped type de arriba ya la garantizó, así
         // que acá solo se recupera esa relación para poder aplicar el spread.
@@ -83,7 +72,6 @@ export function RenderBlocks({ blocks, settings }: RenderBlocksProps) {
             {...block}
             settings={settings}
             anchorId={anchors[position] ?? block.blockType}
-            tone={tone}
           />
         )
       })}

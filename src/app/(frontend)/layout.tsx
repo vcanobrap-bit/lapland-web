@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { DM_Sans, Fraunces, Inter } from 'next/font/google'
 import { draftMode } from 'next/headers'
 
 import { Footer } from '@/components/layout/Footer'
@@ -9,6 +9,24 @@ import { toImageSrc } from '@/lib/media'
 import { getSiteSettings } from '@/lib/queries/getSiteSettings'
 
 import './globals.css'
+
+/*
+ * Las tres familias del design system, con sus roles:
+ * Fraunces para titulares editoriales, DM Sans para UI, Inter para cuerpo.
+ * Variables las tres, así que cada una es un solo archivo para todos los pesos.
+ */
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-fraunces',
+  axes: ['SOFT', 'WONK', 'opsz'],
+})
+
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-dm-sans',
+})
 
 const inter = Inter({
   subsets: ['latin'],
@@ -55,8 +73,8 @@ export default async function FrontendLayout({ children }: { children: React.Rea
   const settings = await getSiteSettings({ draft })
 
   return (
-    <html lang="es" className={inter.variable}>
-      <body className="flex min-h-dvh flex-col font-sans antialiased">
+    <html lang="es" className={`${fraunces.variable} ${dmSans.variable} ${inter.variable}`}>
+      <body className="bg-surface text-ink flex min-h-dvh flex-col antialiased">
         {draft ? <PreviewBanner /> : null}
         <Header settings={settings} />
         <div className="flex-1">{children}</div>

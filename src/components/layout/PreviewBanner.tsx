@@ -4,7 +4,7 @@
  */
 export function PreviewBanner() {
   return (
-    <div className="bg-ink flex flex-wrap items-center justify-center gap-x-4 gap-y-1 px-6 py-2 text-center text-xs text-white">
+    <div className="bg-tension text-on-anchor font-ui text-caption flex flex-wrap items-center justify-center gap-x-4 gap-y-1 px-6 py-2.5 text-center">
       <span>Estás viendo borradores sin publicar.</span>
       <a href="/next/exit-preview" className="underline underline-offset-4">
         Volver al sitio publicado

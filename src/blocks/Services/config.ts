@@ -1,6 +1,7 @@
 import type { Block } from 'payload'
 
 import { anchor } from '@/fields/anchor'
+import { surface } from '@/fields/surface'
 import { richTextContent } from '@/fields/richTextContent'
 
 export const ServicesBlock: Block = {
@@ -39,5 +40,6 @@ export const ServicesBlock: Block = {
       ],
     },
     anchor('servicios'),
+    surface(),
   ],
 }

@@ -1,6 +1,7 @@
 import type { Block } from 'payload'
 
 import { anchor } from '@/fields/anchor'
+import { surface } from '@/fields/surface'
 import { link } from '@/fields/link'
 
 export const HeroBlock: Block = {
@@ -44,5 +45,6 @@ export const HeroBlock: Block = {
       ],
     },
     anchor('inicio'),
+    surface(),
   ],
 }

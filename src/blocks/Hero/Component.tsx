@@ -1,6 +1,8 @@
 import type { HeroBlock } from '@/payload-types'
 
+import { Button } from '@/components/ui/Button'
 import { Container } from '@/components/ui/Container'
+import { cn } from '@/lib/cn'
 import { resolveMedia, toImageSrc } from '@/lib/media'
 
 import { HeroSlider, type HeroSlide } from './HeroSlider'
@@ -10,8 +12,11 @@ type HeroProps = HeroBlock & { anchorId: string }
 /**
  * Server Component. El título, el subtítulo y el botón no necesitan JavaScript,
  * así que se renderizan en el servidor; al cliente solo baja el slider.
+ *
+ * El titular usa el rol `display` del design system —Fraunces, el registro de
+ * máxima autoridad— reservado justamente para portadas y heros.
  */
-export function Hero({ anchorId, cta, slides, subtitle, title }: HeroProps) {
+export function Hero({ anchorId, cta, slides, subtitle, surface, title }: HeroProps) {
   // Cada slide se reduce a lo que el slider realmente usa: mandar el documento
   // de Media completo infla el payload de RSC sin ningún beneficio.
   const clientSlides: HeroSlide[] = (slides ?? []).flatMap((slide, position) => {
@@ -31,28 +36,31 @@ export function Hero({ anchorId, cta, slides, subtitle, title }: HeroProps) {
     ]
   })
 
-  const hasCta = Boolean(cta?.label && cta.href)
+  const isAnchor = surface === 'anchor'
 
   return (
-    <section id={anchorId} className="pt-24 pb-16 md:pt-32">
-      <Container className="mb-14">
-        <h1 className="text-ink max-w-3xl text-4xl font-medium tracking-tight text-balance md:text-6xl">
-          {title}
-        </h1>
+    <section
+      id={anchorId}
+      className={cn('pt-hero pb-section', isAnchor && 'bg-anchor text-on-anchor on-anchor')}
+    >
+      <Container className="mb-component">
+        <h1 className="font-editorial text-display max-w-4xl text-balance">{title}</h1>
 
         {subtitle ? (
-          <p className="text-muted mt-6 max-w-2xl text-lg leading-relaxed text-pretty">
+          <p
+            className={cn(
+              'text-body-lg mt-6 max-w-2xl text-pretty',
+              isAnchor ? 'text-on-anchor/80' : 'text-ink/75',
+            )}
+          >
             {subtitle}
           </p>
         ) : null}
 
-        {hasCta && cta?.href ? (
-          <a
-            href={cta.href}
-            className="bg-ink mt-10 inline-flex items-center rounded-full px-6 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90"
-          >
+        {cta?.label && cta.href ? (
+          <Button href={cta.href} variant={isAnchor ? 'secondary' : 'primary'} className="mt-10">
             {cta.label}
-          </a>
+          </Button>
         ) : null}
       </Container>
 

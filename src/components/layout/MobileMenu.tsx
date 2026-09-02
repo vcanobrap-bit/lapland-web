@@ -62,7 +62,7 @@ export function MobileMenu({ items }: { items: NavItem[] }) {
       <div
         id="menu-movil"
         hidden={!isOpen}
-        className="border-line bg-surface absolute inset-x-0 top-(--header-height) border-b px-6 py-8"
+        className="border-fog bg-surface absolute inset-x-0 top-(--header-height) border-b px-6 py-10"
       >
         <nav aria-label="Principal" className="flex flex-col gap-6">
           {items.map((item) => (
@@ -71,8 +71,8 @@ export function MobileMenu({ items }: { items: NavItem[] }) {
               href={item.href}
               onClick={() => setIsOpen(false)}
               className={cn(
-                'text-lg',
-                item.highlight ? 'text-ink font-medium' : 'text-muted hover:text-ink',
+                'font-ui text-h4',
+                item.highlight ? 'text-ink font-medium' : 'text-ink/70 hover:text-ink',
               )}
             >
               {item.label}

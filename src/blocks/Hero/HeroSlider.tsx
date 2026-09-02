@@ -26,6 +26,10 @@ export type HeroSlide = {
  * —scroll nativo y swipe en móvil— y la hidratación solo agrega autoplay,
  * flechas e indicadores.
  */
+/** Se invierten sobre la superficie de anclaje, igual que el botón. */
+const ARROW_CLASS =
+  'border-fog text-ink/60 hover:border-ink hover:text-ink rounded-button [.on-anchor_&]:border-on-anchor/40 [.on-anchor_&]:text-on-anchor/70 [.on-anchor_&]:hover:border-on-anchor [.on-anchor_&]:hover:text-on-anchor flex size-10 items-center justify-center border transition-colors'
+
 export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
   const { goTo, index, setIsPaused, trackRef } = useCarousel({ count: slides.length })
   const hasControls = slides.length > 1
@@ -50,7 +54,7 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
             aria-roledescription="slide"
             aria-label={`${position + 1} de ${slides.length}`}
           >
-            <div className="bg-subtle relative aspect-16/9 w-full overflow-hidden md:aspect-21/9">
+            <div className="bg-card rounded-card relative aspect-16/9 w-full overflow-hidden md:aspect-21/9">
               <Image
                 alt={slide.alt}
                 src={slide.url}
@@ -63,8 +67,16 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
 
             {slide.title || slide.text ? (
               <figcaption className="mt-4 space-y-1">
-                {slide.title ? <p className="text-ink font-medium">{slide.title}</p> : null}
-                {slide.text ? <p className="text-muted text-sm">{slide.text}</p> : null}
+                {slide.title ? (
+                  <p className="font-ui text-h4 text-ink [.on-anchor_&]:text-on-anchor">
+                    {slide.title}
+                  </p>
+                ) : null}
+                {slide.text ? (
+                  <p className="text-body-sm text-ink/70 [.on-anchor_&]:text-on-anchor/70">
+                    {slide.text}
+                  </p>
+                ) : null}
               </figcaption>
             ) : null}
           </figure>
@@ -77,7 +89,7 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
             type="button"
             onClick={() => goTo(index - 1)}
             aria-label="Slide anterior"
-            className="border-line text-muted hover:border-ink hover:text-ink flex size-9 items-center justify-center rounded-full border transition-colors"
+            className={ARROW_CLASS}
           >
             ←
           </button>
@@ -92,7 +104,9 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
                   aria-current={position === index}
                   className={cn(
                     'block size-2 rounded-full transition-colors',
-                    position === index ? 'bg-ink' : 'bg-line hover:bg-muted',
+                    position === index
+                      ? 'bg-ink [.on-anchor_&]:bg-on-anchor'
+                      : 'bg-fog hover:bg-moss [.on-anchor_&]:bg-on-anchor/35',
                   )}
                 />
               </li>
@@ -103,7 +117,7 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
             type="button"
             onClick={() => goTo(index + 1)}
             aria-label="Slide siguiente"
-            className="border-line text-muted hover:border-ink hover:text-ink flex size-9 items-center justify-center rounded-full border transition-colors"
+            className={ARROW_CLASS}
           >
             →
           </button>

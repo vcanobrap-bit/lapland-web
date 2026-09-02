@@ -1,6 +1,7 @@
 import type { Block } from 'payload'
 
 import { anchor } from '@/fields/anchor'
+import { surface } from '@/fields/surface'
 import { richTextContent } from '@/fields/richTextContent'
 
 export const ListBlock: Block = {
@@ -28,5 +29,6 @@ export const ListBlock: Block = {
       fields: [{ name: 'label', type: 'text', label: 'Texto', required: true }],
     },
     anchor('recursos'),
+    surface(),
   ],
 }
