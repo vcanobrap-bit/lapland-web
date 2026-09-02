@@ -9,6 +9,8 @@ const DEFAULT_ANCHORS: Record<BlockType, string> = {
   about: 'quienes-somos',
   whatWeDo: 'que-hacemos',
   services: 'servicios',
+  stats: 'datos',
+  list: 'recursos',
   contact: 'contacto',
 }
 

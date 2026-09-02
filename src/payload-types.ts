@@ -425,7 +425,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Home {
   id: number;
-  layout?: (HeroBlock | AboutBlock | WhatWeDoBlock | ServicesBlock | ContactBlock)[] | null;
+  layout?: (HeroBlock | AboutBlock | StatsBlock | WhatWeDoBlock | ServicesBlock | ListBlock | ContactBlock)[] | null;
   _status?: ('draft' | 'published') | null;
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -498,6 +498,49 @@ export interface AboutBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StatsBlock".
+ */
+export interface StatsBlock {
+  title?: string | null;
+  intro?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  items?:
+    | {
+        /**
+         * Corta y contundente: «1 de cada 8», «US$ 1 billón», «40–50 %».
+         */
+        value: string;
+        /**
+         * Una frase que complete la cifra.
+         */
+        label: string;
+        source?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Se enlaza como #ancla. Si se deja vacío, se genera una automáticamente.
+   */
+  anchor?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'stats';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "WhatWeDoBlock".
  */
 export interface WhatWeDoBlock {
@@ -563,6 +606,44 @@ export interface ServicesBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'services';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ListBlock".
+ */
+export interface ListBlock {
+  /**
+   * Para enumeraciones cortas. Si cada ítem necesita una descripción, el bloque adecuado es Servicios.
+   */
+  title: string;
+  intro?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  items?:
+    | {
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Se enlaza como #ancla. Si se deja vacío, se genera una automáticamente.
+   */
+  anchor?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'list';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -677,8 +758,10 @@ export interface HomeSelect<T extends boolean = true> {
     | {
         hero?: T | HeroBlockSelect<T>;
         about?: T | AboutBlockSelect<T>;
+        stats?: T | StatsBlockSelect<T>;
         whatWeDo?: T | WhatWeDoBlockSelect<T>;
         services?: T | ServicesBlockSelect<T>;
+        list?: T | ListBlockSelect<T>;
         contact?: T | ContactBlockSelect<T>;
       };
   _status?: T;
@@ -725,6 +808,25 @@ export interface AboutBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StatsBlock_select".
+ */
+export interface StatsBlockSelect<T extends boolean = true> {
+  title?: T;
+  intro?: T;
+  items?:
+    | T
+    | {
+        value?: T;
+        label?: T;
+        source?: T;
+        id?: T;
+      };
+  anchor?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "WhatWeDoBlock_select".
  */
 export interface WhatWeDoBlockSelect<T extends boolean = true> {
@@ -746,6 +848,23 @@ export interface ServicesBlockSelect<T extends boolean = true> {
         icon?: T;
         title?: T;
         description?: T;
+        id?: T;
+      };
+  anchor?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ListBlock_select".
+ */
+export interface ListBlockSelect<T extends boolean = true> {
+  title?: T;
+  intro?: T;
+  items?:
+    | T
+    | {
+        label?: T;
         id?: T;
       };
   anchor?: T;

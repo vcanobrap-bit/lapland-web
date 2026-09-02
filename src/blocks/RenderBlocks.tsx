@@ -7,7 +7,9 @@ import { resolveAnchors } from '@/lib/anchors'
 import { About } from './About/Component'
 import { Contact } from './Contact/Component'
 import { Hero } from './Hero/Component'
+import { List } from './List/Component'
 import { Services } from './Services/Component'
+import { Stats } from './Stats/Component'
 import { WhatWeDo } from './WhatWeDo/Component'
 
 type LayoutBlock = NonNullable<Home['layout']>[number]
@@ -21,6 +23,8 @@ type SharedBlockProps = {
   settings: SiteSetting
   /** Ancla ya resuelta y única en la página. La calcula RenderBlocks. */
   anchorId: string
+  /** Fondo alternado. Lo decide la posición, no el tipo de bloque. */
+  tone: 'default' | 'subtle'
 }
 
 /**
@@ -37,6 +41,8 @@ const BLOCK_COMPONENTS: {
   about: About,
   whatWeDo: WhatWeDo,
   services: Services,
+  stats: Stats,
+  list: List,
   contact: Contact,
 }
 
@@ -52,9 +58,18 @@ export function RenderBlocks({ blocks, settings }: RenderBlocksProps) {
   // Se resuelven de una sola vez para poder garantizar que no se repitan.
   const anchors = resolveAnchors(blocks)
 
+  // El fondo alterna a lo largo de la página. Si el tono lo fijara cada tipo de
+  // bloque, dos secciones grises consecutivas se fundirían en una sola mancha
+  // apenas el cliente reordene las secciones.
+  let toneIndex = 0
+
   return (
     <>
       {blocks.map((block, position) => {
+        // El hero abre la página y siempre va sobre el fondo base.
+        const tone =
+          block.blockType === 'hero' ? 'default' : toneIndex++ % 2 === 1 ? 'subtle' : 'default'
+
         // Indexar el registro con una unión pierde la correspondencia entre el
         // blockType y sus props. El mapped type de arriba ya la garantizó, así
         // que acá solo se recupera esa relación para poder aplicar el spread.
@@ -68,6 +83,7 @@ export function RenderBlocks({ blocks, settings }: RenderBlocksProps) {
             {...block}
             settings={settings}
             anchorId={anchors[position] ?? block.blockType}
+            tone={tone}
           />
         )
       })}
