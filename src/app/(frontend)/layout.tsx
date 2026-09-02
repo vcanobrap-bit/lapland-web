@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import { draftMode } from 'next/headers'
 
 import { Footer } from '@/components/layout/Footer'
+import { PreviewBanner } from '@/components/layout/PreviewBanner'
 import { getSiteSettings } from '@/lib/queries/getSiteSettings'
 
 import './globals.css'
@@ -22,11 +24,13 @@ export const metadata: Metadata = {
  * Ningún componente de sección consulta Payload por su cuenta.
  */
 export default async function FrontendLayout({ children }: { children: React.ReactNode }) {
-  const settings = await getSiteSettings()
+  const { isEnabled: draft } = await draftMode()
+  const settings = await getSiteSettings({ draft })
 
   return (
     <html lang="es" className={inter.variable}>
       <body className="flex min-h-dvh flex-col font-sans antialiased">
+        {draft ? <PreviewBanner /> : null}
         <div className="flex-1">{children}</div>
         <Footer settings={settings} />
       </body>

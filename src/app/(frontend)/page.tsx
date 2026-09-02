@@ -1,3 +1,5 @@
+import { draftMode } from 'next/headers'
+
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { getHome } from '@/lib/queries/getHome'
 import { getSiteSettings } from '@/lib/queries/getSiteSettings'
@@ -7,7 +9,8 @@ import { getSiteSettings } from '@/lib/queries/getSiteSettings'
  * render en los bloques: esta página no sabe qué secciones existen.
  */
 export default async function HomePage() {
-  const [home, settings] = await Promise.all([getHome(), getSiteSettings()])
+  const { isEnabled: draft } = await draftMode()
+  const [home, settings] = await Promise.all([getHome({ draft }), getSiteSettings({ draft })])
 
   return (
     <main>

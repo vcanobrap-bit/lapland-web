@@ -3,6 +3,8 @@ import type { GlobalConfig } from 'payload'
 import { anyone } from '@/access/anyone'
 import { authenticated } from '@/access/authenticated'
 import { blocks } from '@/blocks'
+import { revalidateGlobal } from '@/globals/hooks/revalidateGlobal'
+import { previewUrl } from '@/lib/preview'
 
 /**
  * La home no tiene secciones fijas: tiene una lista de bloques que el cliente
@@ -12,12 +14,18 @@ import { blocks } from '@/blocks'
 export const Home: GlobalConfig = {
   slug: 'home',
   label: 'Home',
-  admin: { group: 'Contenido' },
+  admin: {
+    group: 'Contenido',
+    preview: () => previewUrl('/'),
+  },
   access: {
     read: anyone,
     update: authenticated,
   },
   versions: { drafts: true },
+  hooks: {
+    afterChange: [revalidateGlobal('home')],
+  },
   fields: [
     {
       name: 'layout',

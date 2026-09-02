@@ -2,6 +2,8 @@ import type { GlobalConfig } from 'payload'
 
 import { anyone } from '@/access/anyone'
 import { authenticated } from '@/access/authenticated'
+import { revalidateGlobal } from '@/globals/hooks/revalidateGlobal'
+import { previewUrl } from '@/lib/preview'
 
 /**
  * Datos transversales al sitio. Viven acá y no dentro de una página porque
@@ -11,12 +13,18 @@ import { authenticated } from '@/access/authenticated'
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
   label: 'Ajustes del sitio',
-  admin: { group: 'Configuración' },
+  admin: {
+    group: 'Configuración',
+    preview: () => previewUrl('/'),
+  },
   access: {
     read: anyone,
     update: authenticated,
   },
   versions: { drafts: true },
+  hooks: {
+    afterChange: [revalidateGlobal('site-settings')],
+  },
   fields: [
     {
       type: 'tabs',
