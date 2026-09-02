@@ -30,7 +30,7 @@ export function Stats({ anchorId, intro, items, surface, title }: StatsProps) {
             <dd
               className={cn(
                 'text-body mt-5 max-w-[40ch] text-pretty',
-                isAnchor ? 'text-on-anchor/80' : 'text-ink/75',
+                isAnchor ? 'text-on-anchor/80' : 'text-ink/80',
               )}
             >
               {item.label}
@@ -38,7 +38,7 @@ export function Stats({ anchorId, intro, items, surface, title }: StatsProps) {
                 <span
                   className={cn(
                     'text-caption mt-2 block',
-                    isAnchor ? 'text-on-anchor/55' : 'text-ink/50',
+                    isAnchor ? 'text-on-anchor/70' : 'text-ink/70',
                   )}
                 >
                   {item.source}

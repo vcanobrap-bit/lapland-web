@@ -11,7 +11,7 @@ export function WhatWeDo({ anchorId, content, surface, title }: WhatWeDoProps) {
     <Section id={anchorId} surface={surface}>
       <div className="max-w-3xl">
         <h2 className="font-editorial text-h1 text-balance">{title}</h2>
-        <RichText data={content} className="mt-8" onAnchor={surface === 'anchor'} />
+        <RichText data={content} className="text-body-lg mt-8" onAnchor={surface === 'anchor'} />
       </div>
     </Section>
   )

@@ -38,7 +38,7 @@ export function Footer({ settings }: { settings: SiteSetting }) {
           )}
 
           {brand?.tagline ? (
-            <p className="text-ink/60 text-body-sm max-w-sm">{brand.tagline}</p>
+            <p className="text-ink/70 text-body-sm max-w-xs text-balance">{brand.tagline}</p>
           ) : null}
 
           <address className="text-ink/70 text-body-sm space-y-1 not-italic">
@@ -82,7 +82,7 @@ export function Footer({ settings }: { settings: SiteSetting }) {
           ) : null}
 
           {footer?.copyright ? (
-            <p className="text-ink/60 text-body-sm max-w-sm">
+            <p className="text-ink/70 text-body-sm max-w-xs text-balance">
               © {year} {footer.copyright}
             </p>
           ) : null}

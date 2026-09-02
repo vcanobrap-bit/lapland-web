@@ -31,10 +31,10 @@ export function ContactForm({ onAnchor = false }: { onAnchor?: boolean }) {
   const fieldClass = cn(
     'text-body w-full border-b bg-transparent py-2.5 outline-none transition-colors',
     onAnchor
-      ? 'border-on-anchor/30 focus:border-on-anchor placeholder:text-on-anchor/40'
-      : 'border-fog focus:border-ink placeholder:text-ink/35',
+      ? 'border-on-anchor/30 focus:border-on-anchor placeholder:text-on-anchor/55'
+      : 'border-fog focus:border-ink placeholder:text-ink/55',
   )
-  const labelClass = cn('text-caption uppercase', onAnchor ? 'text-on-anchor/55' : 'text-ink/50')
+  const labelClass = cn('text-caption uppercase', onAnchor ? 'text-on-anchor/70' : 'text-ink/70')
   const errorClass = cn('text-caption mt-1.5', onAnchor ? 'text-support' : 'text-tension')
 
   return (

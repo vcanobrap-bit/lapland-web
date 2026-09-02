@@ -14,7 +14,7 @@ export function About({ anchorId, content, image, surface, title }: AboutProps) 
 
   return (
     <Section id={anchorId} surface={surface}>
-      <div className={cn('grid gap-12', media && 'md:grid-cols-2 md:items-center md:gap-20')}>
+      <div className={cn('grid gap-12', media && 'md:grid-cols-2 md:items-start md:gap-20')}>
         <div className={cn(!media && 'max-w-3xl')}>
           <h2 className="font-editorial text-h1 text-balance">{title}</h2>
           <RichText data={content} className="mt-8" onAnchor={surface === 'anchor'} />

@@ -28,7 +28,7 @@ export type HeroSlide = {
  */
 /** Se invierten sobre la superficie de anclaje, igual que el botón. */
 const ARROW_CLASS =
-  'border-fog text-ink/60 hover:border-ink hover:text-ink rounded-button [.on-anchor_&]:border-on-anchor/40 [.on-anchor_&]:text-on-anchor/70 [.on-anchor_&]:hover:border-on-anchor [.on-anchor_&]:hover:text-on-anchor flex size-10 items-center justify-center border transition-colors'
+  'border-fog text-ink/70 hover:border-ink hover:text-ink rounded-button [.on-anchor_&]:border-on-anchor/40 [.on-anchor_&]:text-on-anchor/70 [.on-anchor_&]:hover:border-on-anchor [.on-anchor_&]:hover:text-on-anchor flex size-10 items-center justify-center border transition-colors'
 
 export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
   const { goTo, index, setIsPaused, trackRef } = useCarousel({ count: slides.length })
@@ -54,7 +54,7 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
             aria-roledescription="slide"
             aria-label={`${position + 1} de ${slides.length}`}
           >
-            <div className="bg-card rounded-card relative aspect-16/9 w-full overflow-hidden md:aspect-21/9">
+            <div className="bg-card rounded-card relative aspect-[4/3] w-full overflow-hidden sm:aspect-[16/9] lg:aspect-[21/9]">
               <Image
                 alt={slide.alt}
                 src={slide.url}

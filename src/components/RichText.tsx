@@ -29,7 +29,7 @@ export function RichText({ data, className, onAnchor = false }: RichTextProps) {
       // aplicarse. Se paga un div para que la tipografía del contenido exista.
       className={cn(
         'text-body space-y-4',
-        onAnchor ? 'text-on-anchor/80' : 'text-ink/75',
+        onAnchor ? 'text-on-anchor/80' : 'text-ink/80',
         '[&_h2]:font-ui [&_h2]:text-h3 [&_h2]:mt-12 [&_h2]:mb-1',
         '[&_h3]:font-ui [&_h3]:text-h4 [&_h3]:mt-8 [&_h3]:mb-1',
         onAnchor

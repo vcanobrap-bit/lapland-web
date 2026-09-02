@@ -13,7 +13,7 @@ export default async function HomePage() {
   const [home, settings] = await Promise.all([getHome({ draft }), getSiteSettings({ draft })])
 
   return (
-    <main>
+    <main id="contenido">
       <RenderBlocks blocks={home.layout} settings={settings} />
     </main>
   )

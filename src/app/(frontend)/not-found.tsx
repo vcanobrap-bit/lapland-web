@@ -8,9 +8,9 @@ import { Container } from '@/components/ui/Container'
 export default function NotFound() {
   return (
     <Container className="flex min-h-[60vh] flex-col justify-center py-24" width="narrow">
-      <p className="text-caption text-ink/50 uppercase">Error 404</p>
+      <p className="text-caption text-ink/70 uppercase">Error 404</p>
       <h1 className="font-editorial text-h1 mt-4 text-balance">No encontramos esta página</h1>
-      <p className="text-body-lg text-ink/75 mt-6">
+      <p className="text-body-lg text-ink/80 mt-6">
         Puede que el enlace esté mal escrito o que la página ya no exista.
       </p>
       <Button href="/" className="mt-10 w-fit">

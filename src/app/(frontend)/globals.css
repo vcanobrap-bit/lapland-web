@@ -71,7 +71,8 @@
   --text-caption--letter-spacing: 0.02em;
 
   /* --- Espaciado: la escala base 4px del sistema -------------------------- */
-  --spacing-section: var(--lap-spacing-layout-section-gap); /* 96px */
+  /* El sistema describe este token como "padding vertical de secciones". */
+  --spacing-section: var(--shared-spacing-16); /* 64px */
   --spacing-hero: var(--lap-spacing-hero-padding-y); /* 128px */
   --spacing-component: var(--lap-spacing-layout-component-gap); /* 48px */
 
@@ -83,6 +84,20 @@
   /* Alto del encabezado fijo. Lo usan el header y el salto a anclas. */
   --header-height: 4.5rem;
 }
+
+/*
+ * Pisos de contraste, calculados sobre los tokens del sistema.
+ *
+ * El design system valida sus pares de color pero no define un token de texto
+ * secundario, así que la jerarquía se resuelve con opacidad. Estos son los
+ * mínimos que se pueden usar sin romper WCAG:
+ *
+ *   text-ink/70        5.21:1  AA   — etiquetas y texto de 12–14px
+ *   text-ink/80        7.10:1  AAA  — cuerpo secundario
+ *   text-on-anchor/70  7.13:1  AAA  — cualquier texto sobre verde noche
+ *
+ * Por debajo de /70 sobre off-white se cae de AA. No bajar sin recalcular.
+ */
 
 @layer base {
   html {

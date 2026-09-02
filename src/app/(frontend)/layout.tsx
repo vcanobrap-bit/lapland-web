@@ -5,6 +5,7 @@ import { draftMode } from 'next/headers'
 import { Footer } from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
 import { PreviewBanner } from '@/components/layout/PreviewBanner'
+import { SkipLink } from '@/components/layout/SkipLink'
 import { toImageSrc } from '@/lib/media'
 import { getSiteSettings } from '@/lib/queries/getSiteSettings'
 
@@ -19,7 +20,8 @@ const fraunces = Fraunces({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-fraunces',
-  axes: ['SOFT', 'WONK', 'opsz'],
+  // Solo el eje de peso. Fraunces trae además SOFT, WONK y opsz; declararlos
+  // sumaba 70 KB al archivo y el sistema no varía ninguno de los tres.
 })
 
 const dmSans = DM_Sans({
@@ -75,6 +77,7 @@ export default async function FrontendLayout({ children }: { children: React.Rea
   return (
     <html lang="es" className={`${fraunces.variable} ${dmSans.variable} ${inter.variable}`}>
       <body className="bg-surface text-ink flex min-h-dvh flex-col antialiased">
+        <SkipLink />
         {draft ? <PreviewBanner /> : null}
         <Header settings={settings} />
         <div className="flex-1">{children}</div>

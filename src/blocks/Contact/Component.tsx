@@ -19,7 +19,7 @@ export function Contact({ anchorId, settings, showForm, surface, text, title }: 
   const { address, email, phone } = settings.contact ?? {}
   const isAnchor = surface === 'anchor'
 
-  const labelClass = cn('text-caption uppercase', isAnchor ? 'text-on-anchor/55' : 'text-ink/50')
+  const labelClass = cn('text-caption uppercase', isAnchor ? 'text-on-anchor/70' : 'text-ink/70')
   const linkClass = 'underline underline-offset-4 transition-opacity hover:opacity-70'
 
   return (

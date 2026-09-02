@@ -50,7 +50,7 @@ export function Hero({ anchorId, cta, slides, subtitle, surface, title }: HeroPr
           <p
             className={cn(
               'text-body-lg mt-6 max-w-2xl text-pretty',
-              isAnchor ? 'text-on-anchor/80' : 'text-ink/75',
+              isAnchor ? 'text-on-anchor/80' : 'text-ink/80',
             )}
           >
             {subtitle}
