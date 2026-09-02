@@ -392,7 +392,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Home {
   id: number;
-  layout?: (HeroBlock | AboutBlock | WhatWeDoBlock)[] | null;
+  layout?: (HeroBlock | AboutBlock | WhatWeDoBlock | ServicesBlock | ContactBlock)[] | null;
   _status?: ('draft' | 'published') | null;
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -482,6 +482,69 @@ export interface WhatWeDoBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ServicesBlock".
+ */
+export interface ServicesBlock {
+  title: string;
+  items?:
+    | {
+        /**
+         * Idealmente un SVG o PNG cuadrado, con fondo transparente.
+         */
+        icon?: (number | null) | Media;
+        title: string;
+        description: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'services';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContactBlock".
+ */
+export interface ContactBlock {
+  /**
+   * El email, el teléfono y la dirección se editan en Ajustes del sitio, no acá: así se actualizan en un solo lugar.
+   */
+  title: string;
+  text?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'contact';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
  */
 export interface SiteSetting {
@@ -520,6 +583,8 @@ export interface HomeSelect<T extends boolean = true> {
         hero?: T | HeroBlockSelect<T>;
         about?: T | AboutBlockSelect<T>;
         whatWeDo?: T | WhatWeDoBlockSelect<T>;
+        services?: T | ServicesBlockSelect<T>;
+        contact?: T | ContactBlockSelect<T>;
       };
   _status?: T;
   updatedAt?: T;
@@ -568,6 +633,33 @@ export interface AboutBlockSelect<T extends boolean = true> {
 export interface WhatWeDoBlockSelect<T extends boolean = true> {
   title?: T;
   content?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ServicesBlock_select".
+ */
+export interface ServicesBlockSelect<T extends boolean = true> {
+  title?: T;
+  items?:
+    | T
+    | {
+        icon?: T;
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContactBlock_select".
+ */
+export interface ContactBlockSelect<T extends boolean = true> {
+  title?: T;
+  text?: T;
   id?: T;
   blockName?: T;
 }

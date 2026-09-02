@@ -1,3 +1,5 @@
+import { cache } from 'react'
+
 import type { Home } from '@/payload-types'
 
 import { getPayloadClient } from '@/lib/payload'
@@ -8,7 +10,7 @@ type Options = { draft?: boolean }
  * Contenido de la home. `depth: 2` resuelve las imágenes de los bloques a
  * documentos de Media en la misma consulta; sin eso llegarían solo los ids.
  */
-export const getHome = async ({ draft = false }: Options = {}): Promise<Home> => {
+export const getHome = cache(async ({ draft = false }: Options = {}): Promise<Home> => {
   const payload = await getPayloadClient()
 
   return payload.findGlobal({
@@ -18,4 +20,4 @@ export const getHome = async ({ draft = false }: Options = {}): Promise<Home> =>
     // En preview hace falta leer borradores, que no son públicos.
     overrideAccess: draft,
   })
-}
+})
