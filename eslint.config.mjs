@@ -14,8 +14,6 @@ const config = [
       // en el build, que falla ruidosamente si una migración está rota.
       'migrations/**',
       'src/app/(payload)/**',
-      '.agents/**',
-      '.claude/**',
     ],
   },
   ...compat.extends('next/core-web-vitals', 'next/typescript'),
