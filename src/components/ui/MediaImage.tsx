@@ -3,6 +3,7 @@ import Image from 'next/image'
 import type { Media } from '@/payload-types'
 
 import { cn } from '@/lib/cn'
+import { toImageSrc } from '@/lib/media'
 
 type MediaImageProps = {
   media: Media | number | null | undefined
@@ -22,12 +23,13 @@ export function MediaImage({ media, className, sizes, priority, fill }: MediaIma
   if (!media || typeof media !== 'object' || !media.url) return null
 
   const { alt, url, width, height } = media
+  const src = toImageSrc(url)
 
   if (fill) {
     return (
       <Image
         alt={alt}
-        src={url}
+        src={src}
         fill
         sizes={sizes ?? '100vw'}
         priority={priority}
@@ -39,7 +41,7 @@ export function MediaImage({ media, className, sizes, priority, fill }: MediaIma
   return (
     <Image
       alt={alt}
-      src={url}
+      src={src}
       width={width ?? 1200}
       height={height ?? 800}
       sizes={sizes}

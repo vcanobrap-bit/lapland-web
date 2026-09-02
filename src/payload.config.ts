@@ -9,6 +9,7 @@ import sharp from 'sharp'
 
 import { Media } from '@/collections/Media'
 import { Users } from '@/collections/Users'
+import { Home } from '@/globals/Home'
 import { SiteSettings } from '@/globals/SiteSettings'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -22,7 +23,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Media],
-  globals: [SiteSettings],
+  globals: [Home, SiteSettings],
   editor: lexicalEditor(),
   db: postgresAdapter({
     pool: { connectionString: process.env.DATABASE_URI ?? '' },
