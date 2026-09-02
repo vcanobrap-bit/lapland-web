@@ -2,7 +2,9 @@ import type { ComponentType } from 'react'
 
 import type { Home } from '@/payload-types'
 
+import { About } from './About/Component'
 import { Hero } from './Hero/Component'
+import { WhatWeDo } from './WhatWeDo/Component'
 
 type LayoutBlock = NonNullable<Home['layout']>[number]
 type BlockType = LayoutBlock['blockType']
@@ -18,6 +20,8 @@ const BLOCK_COMPONENTS: {
   [K in BlockType]: ComponentType<Extract<LayoutBlock, { blockType: K }>>
 } = {
   hero: Hero,
+  about: About,
+  whatWeDo: WhatWeDo,
 }
 
 /** Traduce la lista de bloques del CMS a componentes. */
