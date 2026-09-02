@@ -81,17 +81,37 @@ interacción real.
 | `Hero/HeroSlider.tsx`                      | **Client**: slide activo, autoplay, navegación    |
 | `hooks/useCarousel.ts`                     | Client: lógica del slider                         |
 
-El hero no es Client Component entero. Es un Server Component que monta adentro
-un slider cliente al que le pasa solo los campos que usa, no el documento de
-Media completo. Resultado: la home entera suma 1.8 kB de JavaScript.
+Ni el hero ni la sección de contacto son Client Components enteros. Cada uno es
+un Server Component que monta adentro la única pieza que necesita cliente: el
+slider en un caso, el formulario en el otro. El hero además le pasa al slider
+solo los campos que usa, no el documento de Media completo.
 
 El slider está construido sobre `scroll-snap`, así que funciona sin JavaScript
 —scroll nativo y swipe en móvil— y la hidratación solo agrega autoplay, flechas
 e indicadores. El autoplay respeta `prefers-reduced-motion`.
 
-Cuando haga falta un formulario de contacto, el patrón es el mismo: la sección
-sigue siendo Server Component y el formulario, con sus estados de carga, éxito y
-error, es un Client Component con Server Action.
+### Formulario de contacto
+
+La sección de contacto sigue siendo Server Component; solo el formulario cruza
+al cliente, y solo si el cliente lo activó desde el CMS.
+
+- `ContactForm.tsx` usa `useActionState`, así que **funciona sin JavaScript**:
+  sin hidratar, el navegador envía el formulario igual y Next ejecuta la acción.
+- `actions.ts` es la Server Action. Valida en el servidor y no solo en el
+  navegador: la validación del cliente es comodidad, no seguridad.
+- El estado inicial y sus tipos viven en `formState.ts`, aparte. Un módulo con
+  `'use server'` solo puede exportar funciones async; exportar el estado inicial
+  desde `actions.ts` hace fallar la acción en tiempo de ejecución.
+- Los mensajes se guardan en la colección `Submissions`, que tiene `create`
+  cerrado para todos —incluido el admin—. La Server Action es la única vía de
+  escritura y usa `overrideAccess`. Así el endpoint público `/api/submissions`
+  responde 403 a cualquier intento de creación.
+- Contra bots hay un campo trampa oculto: si viene completo, se responde como si
+  todo hubiera funcionado y no se guarda nada.
+
+Lo que **no** trae: rate limiting ni notificación por email. Para producción
+conviene sumar límite de envíos por IP y un adaptador de email que avise al
+cliente de cada mensaje nuevo.
 
 ## Cache y publicación
 

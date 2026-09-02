@@ -8,6 +8,7 @@ import { buildConfig } from 'payload'
 import sharp from 'sharp'
 
 import { Media } from '@/collections/Media'
+import { Submissions } from '@/collections/Submissions'
 import { Users } from '@/collections/Users'
 import { Home } from '@/globals/Home'
 import { SiteSettings } from '@/globals/SiteSettings'
@@ -22,7 +23,7 @@ export default buildConfig({
       titleSuffix: ' · Lapland',
     },
   },
-  collections: [Users, Media],
+  collections: [Users, Media, Submissions],
   globals: [Home, SiteSettings],
   editor: lexicalEditor(),
   db: postgresAdapter({

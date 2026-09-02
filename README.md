@@ -44,6 +44,8 @@ La primera visita a `/admin` pide crear el usuario administrador. Después, en
 sitio** van el contacto, el footer y las redes. Ambos requieren **publicar**
 para que aparezcan en el sitio.
 
+Los mensajes del formulario de contacto llegan a **Contenido → Mensajes**.
+
 ## Scripts
 
 | Comando                           | Qué hace                                        |
@@ -82,8 +84,17 @@ Después de cambiar campos del CMS: `generate:types` y `migrate:create`.
 
 4. **Build command:** `npm run ci` (corre las migraciones antes del build).
 
+   `DATABASE_URI` tiene que estar disponible **durante el build**, no solo en
+   runtime: la home se prerenderiza y para eso consulta Payload.
+
 5. Después del primer deploy, entrar a `/admin` para crear el usuario
    administrador.
 
 `NEXT_PUBLIC_SERVER_URL` tiene que ser el dominio real: Payload lo usa para los
 enlaces de preview y lo agrega a la allowlist CSRF.
+
+## Pendientes conocidos
+
+El formulario de contacto guarda los mensajes en la base pero **no notifica por
+email ni tiene rate limiting**. Antes de abrirlo a tráfico real conviene sumar
+un adaptador de email y un límite de envíos por IP.

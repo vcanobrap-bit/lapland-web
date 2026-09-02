@@ -18,5 +18,14 @@ export const ContactBlock: Block = {
       },
     },
     richTextContent({ name: 'text', label: 'Texto' }),
+    {
+      name: 'showForm',
+      type: 'checkbox',
+      label: 'Mostrar formulario de contacto',
+      defaultValue: true,
+      admin: {
+        description: 'Los mensajes recibidos aparecen en Contenido → Mensajes.',
+      },
+    },
   ],
 }
