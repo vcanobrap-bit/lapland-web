@@ -2,6 +2,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { es } from '@payloadcms/translations/languages/es'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { buildConfig } from 'payload'
@@ -23,7 +24,14 @@ export default buildConfig({
       titleSuffix: ' · Lapland',
     },
   },
-  collections: [Users, Media, Submissions],
+  // El orden define el de los grupos del menú: primero lo que el cliente edita
+  // a diario, al final lo técnico. Payload lista las colecciones de un grupo
+  // antes que sus globals, así que Mensajes precede a Home dentro de Contenido.
+  collections: [Submissions, Media, Users],
+  i18n: {
+    fallbackLanguage: 'es',
+    supportedLanguages: { es },
+  },
   globals: [Home, SiteSettings],
   editor: lexicalEditor(),
   db: postgresAdapter({

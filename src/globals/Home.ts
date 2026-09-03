@@ -3,6 +3,7 @@ import type { GlobalConfig } from 'payload'
 import { anyone } from '@/access/anyone'
 import { authenticated } from '@/access/authenticated'
 import { blocks } from '@/blocks'
+import { labelBlocks } from '@/globals/hooks/labelBlocks'
 import { revalidateGlobal } from '@/globals/hooks/revalidateGlobal'
 import { previewUrl } from '@/lib/preview'
 
@@ -24,6 +25,7 @@ export const Home: GlobalConfig = {
   },
   versions: { drafts: true },
   hooks: {
+    beforeChange: [labelBlocks],
     afterChange: [revalidateGlobal('home')],
   },
   fields: [
