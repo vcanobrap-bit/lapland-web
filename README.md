@@ -90,7 +90,9 @@ Después de cambiar campos del CMS: `generate:types` y `migrate:create`.
    | `NEXT_PUBLIC_SERVER_URL` | El dominio final, sin barra al final     |
    | `BLOB_READ_WRITE_TOKEN`  | Lo inyecta Vercel al crear el Blob store |
 
-4. **Build command:** `npm run ci` (corre las migraciones antes del build).
+4. **Build command:** ya viene resuelto en `vercel.json` (`npm run ci`, que
+   aplica las migraciones antes de construir). No hace falta configurarlo en la
+   interfaz.
 
    `DATABASE_URI` tiene que estar disponible **durante el build**, no solo en
    runtime: la home se prerenderiza y para eso consulta Payload.
