@@ -33,13 +33,21 @@ openssl rand -base64 32   # PREVIEW_SECRET
 vacío: sin token, los medios se guardan en disco.
 
 ```bash
+npm run migrate   # crea el schema
+npm run seed      # publica el contenido inicial
 npm run dev
 ```
 
 - Sitio: http://localhost:3000
 - Admin: http://localhost:3000/admin
 
-La primera visita a `/admin` pide crear el usuario administrador. Después, en
+`npm run seed` deja el sitio publicado y navegable, y crea el usuario
+administrador `editor@lapland.cl` / `Lapland123!` (se puede cambiar con las
+variables `SEED_EMAIL` y `SEED_PASSWORD`). **Cambiá esa contraseña antes de
+exponer el sitio.**
+
+Sin el seed, la primera visita a `/admin` pide crear el usuario administrador y
+hay que cargar las siete secciones a mano. Después, en
 **Contenido → Home** se arman las secciones y en **Configuración → Ajustes del
 sitio** van el contacto, el footer y las redes. Ambos requieren **publicar**
 para que aparezcan en el sitio.
@@ -87,8 +95,20 @@ Después de cambiar campos del CMS: `generate:types` y `migrate:create`.
    `DATABASE_URI` tiene que estar disponible **durante el build**, no solo en
    runtime: la home se prerenderiza y para eso consulta Payload.
 
-5. Después del primer deploy, entrar a `/admin` para crear el usuario
-   administrador.
+5. **Sembrar el contenido.** Con las variables de producción en tu `.env` local,
+   apuntando a la base de producción:
+
+   ```bash
+   npm run seed
+   ```
+
+   Deja el sitio publicado y crea el usuario administrador. Entrá a `/admin`,
+   iniciá sesión y **cambiá la contraseña**.
+
+6. **Redeploy.** El seed escribe en la base sin pasar por Next, así que no puede
+   invalidar el cache: hace falta un deploy más para que la home se
+   pre-renderice con el contenido. A partir de ahí, publicar desde el panel
+   actualiza el sitio solo.
 
 `NEXT_PUBLIC_SERVER_URL` tiene que ser el dominio real: Payload lo usa para los
 enlaces de preview y lo agrega a la allowlist CSRF.

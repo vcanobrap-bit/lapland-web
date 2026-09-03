@@ -24,8 +24,16 @@ export const revalidateGlobal =
     const wasPublished = previousDoc?._status === 'published'
 
     if (isPublished || wasPublished) {
-      revalidateTag(globalCacheTag(slug))
-      req.payload.logger.info(`Cache invalidado para el global "${slug}".`)
+      try {
+        revalidateTag(globalCacheTag(slug))
+        req.payload.logger.info(`Cache invalidado para el global "${slug}".`)
+      } catch {
+        // revalidateTag solo existe dentro de una request de Next. Un script
+        // que escriba por la Local API —seed, migración, tarea programada—
+        // no tiene ese contexto, y ahí no hay cache que invalidar: el
+        // contenido se sirve fresco en el próximo arranque.
+        req.payload.logger.info(`Sin contexto de Next: se omite la invalidación de "${slug}".`)
+      }
     }
 
     return doc

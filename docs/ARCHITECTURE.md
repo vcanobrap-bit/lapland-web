@@ -166,6 +166,21 @@ Nadie escribe a mano un tipo del modelo. Se agrega un campo, se corre
 
 Si se salta el paso 4, el build falla. Es a propósito.
 
+## Contenido inicial
+
+`npm run seed` (`src/scripts/seed.ts`) deja una base recién creada con el sitio
+publicado: usuario administrador, medios de referencia, ajustes del sitio y las
+siete secciones de la home. Existe porque un deploy nuevo arrancaría con el
+panel vacío y siete secciones que cargar a mano.
+
+Genera sus propias imágenes con sharp —placeholders en la paleta de apoyo y una
+tarjeta para compartir de 1200×630—, así que no depende de archivos externos.
+
+Corre fuera de una request de Next, por lo que `revalidateTag` no está
+disponible: el seed lo declara con `context.disableRevalidate` y el hook además
+tolera la ausencia de contexto, para que ningún script que escriba por la Local
+API pueda romperse por esto.
+
 ## Base de datos
 
 Postgres. En desarrollo `push: true` sincroniza el schema solo. En producción
