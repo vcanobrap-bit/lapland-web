@@ -42,7 +42,24 @@ const seed = async (): Promise<void> => {
   }
 
   // --- Medios ----------------------------------------------------------------
+  /**
+   * Sube un medio, o reutiliza el que ya exista con el mismo texto alternativo.
+   *
+   * Payload renombra los archivos al colisionar, así que sin esta búsqueda cada
+   * corrida del seed dejaría una copia más y la biblioteca del cliente se
+   * llenaría de placeholders casi idénticos.
+   */
   const upload = async (name: string, alt: string, data: Buffer, mimeType: string) => {
+    const existing = await payload.find({
+      collection: 'media',
+      where: { alt: { equals: alt } },
+      limit: 1,
+      pagination: false,
+    })
+
+    const found = existing.docs[0]
+    if (found) return found.id
+
     const doc = await payload.create({
       collection: 'media',
       data: { alt },
@@ -75,7 +92,7 @@ const seed = async (): Promise<void> => {
     share,
     'image/png',
   )
-  payload.logger.info('Medios de referencia cargados.')
+  payload.logger.info('Medios de referencia listos.')
 
   // --- Ajustes del sitio -----------------------------------------------------
   // Sin request de Next no hay cache que invalidar; el hook lo sabe por acá.
