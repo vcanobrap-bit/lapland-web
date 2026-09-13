@@ -1,0 +1,216 @@
+/**
+ * tokens.css — Design system de Lapland.
+ *
+ * Portado literal desde vcanobrap-bit/lapland-system
+ * (output/design-systems/docs/assets/tokens.css).
+ *
+ * Los nombres --lap-* y --shared-* se conservan intactos a propósito: el
+ * repositorio del design system sigue siendo la fuente de verdad y una
+ * actualización allá se re-sincroniza acá sin traducir nada. La capa de
+ * Tailwind se mapea sobre estos tokens en globals.css.
+ *
+ * El sitio es de una sola marca, así que el scope [data-brand="lapland"] del
+ * original se aplana a :root.
+ */
+
+:root {
+  /* === COLOR — NEUTRALES COMPARTIDOS === */
+  --shared-color-neutral-anchor: #182d2a;
+  --shared-color-neutral-warm-white: #f7f7f5;
+  --shared-color-neutral-near-black: #1c1c1a;
+
+  /* === SPACING — ESCALA PRIMITIVA COMPARTIDA (base 4px) === */
+  --shared-spacing-1: 4px; /* xs */
+  --shared-spacing-2: 8px; /* sm */
+  --shared-spacing-3: 12px; /* sm-plus */
+  --shared-spacing-4: 16px; /* md */
+  --shared-spacing-5: 20px; /* md-plus */
+  --shared-spacing-6: 24px; /* lg */
+  --shared-spacing-8: 32px; /* xl */
+  --shared-spacing-10: 40px; /* xl-plus */
+  --shared-spacing-12: 48px; /* 2xl */
+  --shared-spacing-16: 64px; /* 3xl */
+  --shared-spacing-24: 96px; /* 4xl */
+  --shared-spacing-32: 128px; /* 5xl */
+
+  /* === RADIUS — ESCALA PRIMITIVA COMPARTIDA === */
+  --shared-radius-none: 0px;
+  --shared-radius-xs: 2px;
+  --shared-radius-sm: 4px;
+  --shared-radius-md: 8px;
+  --shared-radius-lg: 12px;
+  --shared-radius-xl: 16px;
+  --shared-radius-2xl: 48px;
+  --shared-radius-full: 9999px;
+
+  /* === TOKENS LAPLAND === */
+
+  /* === COLOR — PRIMITIVOS LAPLAND === */
+
+  /* Verde (paleta base) */
+  --lap-color-primitive-green-night: #182d2a;
+  --lap-color-primitive-green-moss: #7c9c80;
+  --lap-color-primitive-green-fog: #b7c8b0;
+  --lap-color-primitive-green-subtle-1: #d6edca;
+  --lap-color-primitive-green-subtle-2: #e9f8e3;
+
+  /* Warm */
+  --lap-color-primitive-warm-offwhite: #f5f2ec;
+
+  /* Accent — SA-02 CERRADA */
+  --lap-color-primitive-accent-tension: #4e433b;
+
+  /* Amber — color de apoyo */
+  --lap-color-primitive-amber-gold: #ebb552;
+
+  /* === COLOR — SEMÁNTICOS LAPLAND === */
+
+  /* Superficies */
+  --lap-color-surface-primary: #f5f2ec; /* resolved from {lap.color.primitive.warm.offwhite} */
+  --lap-color-surface-anchor: #182d2a; /* resolved from {lap.color.primitive.green.night} */
+  --lap-color-surface-support-medium: #7c9c80; /* resolved from {lap.color.primitive.green.moss} */
+  --lap-color-surface-support-light: #b7c8b0; /* resolved from {lap.color.primitive.green.fog} */
+  --lap-color-surface-card: #d6edca; /* resolved from {lap.color.primitive.green.subtle-1} */
+  --lap-color-surface-card-alt: #e9f8e3; /* resolved from {lap.color.primitive.green.subtle-2} */
+
+  /* Contenido */
+  --lap-color-content-primary: #182d2a; /* resolved from {lap.color.primitive.green.night} */
+  --lap-color-content-on-anchor: #f5f2ec; /* resolved from {lap.color.primitive.warm.offwhite} */
+
+  /* Accent */
+  --lap-color-accent-tension: #4e433b; /* resolved from {lap.color.primitive.accent.tension} */
+  --lap-color-accent-support: #ebb552; /* resolved from {lap.color.primitive.amber.gold} */
+
+  /* === ICONOGRAFÍA === */
+  --lap-icon-size-sm: 16px; /* Inline con texto */
+  --lap-icon-size-md: 20px; /* UI estándar */
+  --lap-icon-size-lg: 24px; /* Acción destacada */
+  --lap-icon-size-xl: 32px; /* Feature / estado vacío */
+  --lap-icon-stroke: 1.5; /* Trazo fino — coherente con austeridad editorial */
+  --lap-icon-color: var(--lap-color-content-primary);
+  --lap-icon-color-muted: var(--lap-color-surface-support-medium);
+  --lap-icon-color-on-anchor: var(--lap-color-content-on-anchor);
+  --lap-icon-color-support: var(--lap-color-accent-support);
+
+  /* === TIPOGRAFÍA — FAMILIAS === */
+  --lap-font-family-editorial: 'Fraunces Variable', serif;
+  --lap-font-family-ui: 'DM Sans Variable', sans-serif;
+  --lap-font-family-body: 'Inter Variable', sans-serif;
+
+  /* === TIPOGRAFÍA — PESOS === */
+  --lap-font-weight-regular: 400;
+  --lap-font-weight-medium: 500;
+  --lap-font-weight-semibold: 600;
+  --lap-font-weight-bold: 700;
+
+  /* === TIPOGRAFÍA — ESCALA (display → caption) === */
+
+  /* display: Fraunces 56px bold */
+  --lap-typography-display-family: var(--lap-font-family-editorial);
+  --lap-typography-display-size: 3.5rem; /* 56px */
+  --lap-typography-display-weight: var(--lap-font-weight-bold);
+  --lap-typography-display-line-height: 1.14;
+  --lap-typography-display-letter-spacing: -0.02em;
+
+  /* heading-1: Fraunces 48px semibold */
+  --lap-typography-h1-family: var(--lap-font-family-editorial);
+  --lap-typography-h1-size: 3rem; /* 48px */
+  --lap-typography-h1-weight: var(--lap-font-weight-semibold);
+  --lap-typography-h1-line-height: 1.17;
+  --lap-typography-h1-letter-spacing: -0.015em;
+
+  /* heading-2: DM Sans 36px semibold */
+  --lap-typography-h2-family: var(--lap-font-family-ui);
+  --lap-typography-h2-size: 2.25rem; /* 36px */
+  --lap-typography-h2-weight: var(--lap-font-weight-semibold);
+  --lap-typography-h2-line-height: 1.22;
+  --lap-typography-h2-letter-spacing: -0.01em;
+
+  /* heading-3: DM Sans 28px medium */
+  --lap-typography-h3-family: var(--lap-font-family-ui);
+  --lap-typography-h3-size: 1.75rem; /* 28px */
+  --lap-typography-h3-weight: var(--lap-font-weight-medium);
+  --lap-typography-h3-line-height: 1.29;
+  --lap-typography-h3-letter-spacing: 0em;
+
+  /* heading-4: DM Sans 22px medium */
+  --lap-typography-h4-family: var(--lap-font-family-ui);
+  --lap-typography-h4-size: 1.375rem; /* 22px */
+  --lap-typography-h4-weight: var(--lap-font-weight-medium);
+  --lap-typography-h4-line-height: 1.36;
+  --lap-typography-h4-letter-spacing: 0em;
+
+  /* body-large: Inter 18px regular */
+  --lap-typography-body-large-family: var(--lap-font-family-body);
+  --lap-typography-body-large-size: 1.125rem; /* 18px */
+  --lap-typography-body-large-weight: var(--lap-font-weight-regular);
+  --lap-typography-body-large-line-height: 1.56;
+  --lap-typography-body-large-letter-spacing: 0em;
+
+  /* body: Inter 16px regular */
+  --lap-typography-body-family: var(--lap-font-family-body);
+  --lap-typography-body-size: 1rem; /* 16px */
+  --lap-typography-body-weight: var(--lap-font-weight-regular);
+  --lap-typography-body-line-height: 1.5;
+  --lap-typography-body-letter-spacing: 0em;
+
+  /* body-small: Inter 14px regular */
+  --lap-typography-body-small-family: var(--lap-font-family-body);
+  --lap-typography-body-small-size: 0.875rem; /* 14px */
+  --lap-typography-body-small-weight: var(--lap-font-weight-regular);
+  --lap-typography-body-small-line-height: 1.57;
+  --lap-typography-body-small-letter-spacing: 0.01em;
+
+  /* caption: Inter 12px regular */
+  --lap-typography-caption-family: var(--lap-font-family-body);
+  --lap-typography-caption-size: 0.75rem; /* 12px */
+  --lap-typography-caption-weight: var(--lap-font-weight-regular);
+  --lap-typography-caption-line-height: 1.5;
+  --lap-typography-caption-letter-spacing: 0.02em;
+
+  /* === SPACING — SEMÁNTICO LAPLAND === */
+
+  /* Botón */
+  --lap-spacing-button-padding-y: var(--shared-spacing-3); /* 12px */
+  --lap-spacing-button-padding-x: var(--shared-spacing-5); /* 20px */
+  --lap-spacing-button-gap: var(--shared-spacing-2); /* 8px */
+
+  /* Tag */
+  --lap-spacing-tag-padding-y: var(--shared-spacing-1); /* 4px */
+  --lap-spacing-tag-padding-x: var(--shared-spacing-2); /* 8px */
+
+  /* Card */
+  --lap-spacing-card-padding: var(--shared-spacing-8); /* 32px */
+  --lap-spacing-card-gap: var(--shared-spacing-4); /* 16px */
+
+  /* Section Header */
+  --lap-spacing-section-header-gap-supra-title: var(--shared-spacing-2); /* 8px */
+  --lap-spacing-section-header-gap-title-body: var(--shared-spacing-4); /* 16px */
+  --lap-spacing-section-header-margin-top: var(--shared-spacing-24); /* 96px */
+
+  /* Hero */
+  --lap-spacing-hero-padding-y: var(--shared-spacing-32); /* 128px */
+  --lap-spacing-hero-padding-x: var(--shared-spacing-12); /* 48px */
+  --lap-spacing-hero-gap-elements: var(--shared-spacing-6); /* 24px */
+
+  /* Quote */
+  --lap-spacing-quote-padding-left: var(--shared-spacing-6); /* 24px */
+  --lap-spacing-quote-margin-y: var(--shared-spacing-12); /* 48px */
+
+  /* List */
+  --lap-spacing-list-gap-items: var(--shared-spacing-6); /* 24px */
+  --lap-spacing-list-indent: var(--shared-spacing-4); /* 16px */
+
+  /* Layout */
+  --lap-spacing-layout-section-gap: var(--shared-spacing-24); /* 96px */
+  --lap-spacing-layout-component-gap: var(--shared-spacing-12); /* 48px */
+  --lap-spacing-layout-page-margin: var(--shared-spacing-12); /* 48px */
+
+  /* === RADIUS — SEMÁNTICO LAPLAND === */
+  --lap-radius-button: var(--shared-radius-full); /* 9999px — pill según design-spec */
+  --lap-radius-card: var(--shared-radius-none); /* 0px   — flat según design-spec */
+  --lap-radius-tag: var(--shared-radius-lg); /* 12px  — familia 12px según design-spec */
+  --lap-radius-container: var(--shared-radius-lg); /* 12px  — nuevo */
+  --lap-radius-container-lg: var(--shared-radius-2xl); /* 48px  — nuevo */
+  --lap-radius-divider-cap: var(--shared-radius-none); /* 0px */
+}
