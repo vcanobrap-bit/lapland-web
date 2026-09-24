@@ -50,7 +50,20 @@ export const SiteSettings: GlobalConfig = {
                   type: 'upload',
                   relationTo: 'media',
                   label: 'Logo',
-                  admin: { description: 'Se usa en el encabezado y en el pie. Idealmente SVG.' },
+                  admin: {
+                    description:
+                      'Se usa en el encabezado, el menú móvil y el pie. Idealmente SVG o PNG transparente.',
+                  },
+                },
+                {
+                  name: 'logoLight',
+                  type: 'upload',
+                  relationTo: 'media',
+                  label: 'Logo claro',
+                  admin: {
+                    description:
+                      'Versión en blanco para el encabezado sobre la foto del hero. Si falta, se aclara el logo principal.',
+                  },
                 },
                 {
                   name: 'tagline',

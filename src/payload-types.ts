@@ -435,7 +435,14 @@ export interface Home {
  * via the `definition` "HeroBlock".
  */
 export interface HeroBlock {
+  /**
+   * Cada salto de línea es un corte del titular. Dos líneas es lo ideal.
+   */
   title: string;
+  /**
+   * Tiene que aparecer tal cual en el título. Se muestra en cursiva con un trazo de aurora debajo.
+   */
+  highlight?: string | null;
   subtitle?: string | null;
   cta?: {
     label?: string | null;
@@ -444,25 +451,29 @@ export interface HeroBlock {
      */
     href?: string | null;
   };
+  secondaryCta?: {
+    label?: string | null;
+    /**
+     * Ancla o ruta interna (#contacto, /servicios) o URL completa (https://…).
+     */
+    href?: string | null;
+  };
   /**
-   * Sin slides el hero muestra solo el texto. Con uno o más, aparece el carrusel.
+   * Paisaje horizontal con cielo arriba y la parte oscura abajo, donde va el texto. El punto de enfoque de la imagen decide el encuadre.
    */
-  slides?:
-    | {
-        image: number | Media;
-        title?: string | null;
-        text?: string | null;
-        id?: string | null;
-      }[]
-    | null;
+  background?: (number | null) | Media;
+  /**
+   * La misma imagen de fondo, del mismo tamaño, con el cielo transparente (PNG o WebP). Con ella la aurora pasa por detrás de las montañas.
+   */
+  foreground?: (number | null) | Media;
+  /**
+   * Cortinas de luz en los colores de la marca, que se mueven lento sobre el cielo.
+   */
+  aurora?: boolean | null;
   /**
    * Se enlaza como #ancla. Si se deja vacío, se genera una automáticamente.
    */
   anchor?: string | null;
-  /**
-   * El fondo oscuro es un recurso de énfasis: una o dos secciones en toda la página. Si se usa en todas, deja de destacar ninguna.
-   */
-  surface?: ('primary' | 'anchor') | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'hero';
@@ -721,9 +732,13 @@ export interface SiteSetting {
      */
     name: string;
     /**
-     * Se usa en el encabezado y en el pie. Idealmente SVG.
+     * Se usa en el encabezado, el menú móvil y el pie. Idealmente SVG o PNG transparente.
      */
     logo?: (number | null) | Media;
+    /**
+     * Versión en blanco para el encabezado sobre la foto del hero. Si falta, se aclara el logo principal.
+     */
+    logoLight?: (number | null) | Media;
     /**
      * Frase corta que acompaña la marca en el pie.
      */
@@ -803,6 +818,7 @@ export interface HomeSelect<T extends boolean = true> {
  */
 export interface HeroBlockSelect<T extends boolean = true> {
   title?: T;
+  highlight?: T;
   subtitle?: T;
   cta?:
     | T
@@ -810,16 +826,16 @@ export interface HeroBlockSelect<T extends boolean = true> {
         label?: T;
         href?: T;
       };
-  slides?:
+  secondaryCta?:
     | T
     | {
-        image?: T;
-        title?: T;
-        text?: T;
-        id?: T;
+        label?: T;
+        href?: T;
       };
+  background?: T;
+  foreground?: T;
+  aurora?: T;
   anchor?: T;
-  surface?: T;
   id?: T;
   blockName?: T;
 }
@@ -928,6 +944,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
     | {
         name?: T;
         logo?: T;
+        logoLight?: T;
         tagline?: T;
       };
   nav?:

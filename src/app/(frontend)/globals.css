@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 @import './tokens.css';
+@import './brand.css';
+@import './hero.css';
 
 /*
  * Puente entre el design system y Tailwind.
@@ -24,6 +26,16 @@
   --color-support: var(--lap-color-accent-support);
   --color-moss: var(--lap-color-surface-support-medium);
   --color-fog: var(--lap-color-surface-support-light);
+
+  /* --- Color del manual v1.0 (brand.css). Hoy solo en encabezado y hero. -- */
+  --color-teal: var(--lap-brand-teal);
+  --color-teal-dark: var(--lap-brand-teal-dark);
+  --color-teal-mid: var(--lap-brand-teal-mid);
+  --color-verde: var(--lap-brand-verde);
+  --color-verde-dark: var(--lap-brand-verde-dark);
+  --color-verde-mid: var(--lap-brand-verde-mid);
+  --color-boreas: var(--lap-brand-boreas);
+  --color-boreas-mid: var(--lap-brand-boreas-mid);
 
   /*
    * --- Escala tipográfica ------------------------------------------------
@@ -81,8 +93,8 @@
   --radius-card: var(--lap-radius-card); /* 0 — flat */
   --radius-tag: var(--lap-radius-tag); /* 12px */
 
-  /* Alto del encabezado fijo. Lo usan el header y el salto a anclas. */
-  --header-height: 4.5rem;
+  /* Alto del encabezado compacto. Lo usa el salto a anclas. */
+  --header-height: var(--lap-header-compact);
 }
 
 /*
@@ -102,6 +114,12 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    /*
+     * Fraunces se carga con su eje óptico para que el hero use el corte 9pt del
+     * manual. Sin esto, el navegador ajustaría ese eje según el tamaño en todos
+     * los titulares y cambiaría cómo se ven las demás secciones.
+     */
+    font-optical-sizing: none;
   }
 
   /*
