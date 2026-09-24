@@ -1,7 +1,7 @@
 # lapland-web
 
 Landing page autogestionable con **Payload CMS 3** sobre **Next.js 15**. El
-cliente edita textos, imágenes, slides del hero, servicios y datos de contacto
+cliente edita textos, imágenes, la foto del hero, servicios y datos de contacto
 desde `/admin`, y publica sin tocar código.
 
 La arquitectura y el porqué de cada decisión están en

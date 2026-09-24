@@ -1,53 +1,103 @@
+import type { CSSProperties } from 'react'
+
 import type { StatsBlock } from '@/payload-types'
 
-import { RichText } from '@/components/RichText'
-import { Section } from '@/components/ui/Section'
+import { Container } from '@/components/ui/Container'
 import { cn } from '@/lib/cn'
+import { splitHighlight } from '@/lib/highlight'
+
+import { ONE_TRILLION } from './constants'
+import { PeoplePictogram } from './PeoplePictogram'
+import { StatsReveal } from './StatsReveal'
+import { YearCost } from './YearCost'
 
 type StatsProps = StatsBlock & { anchorId: string }
+type StatItem = NonNullable<StatsBlock['items']>[number]
 
-/**
- * Server Component. Sigue el componente `stat-highlight` del design system: la
- * cifra en Fraunces, su explicación en Inter. El dato no existe sin el contexto
- * que lo justifica, así que ambos van siempre juntos.
- */
-export function Stats({ anchorId, intro, items, surface, title }: StatsProps) {
-  if (!items?.length) return null
+/** Las tarjetas entran una tras otra. */
+const CARD_STEP_MS = 140
 
-  const isAnchor = surface === 'anchor'
+/** La cifra completa, con la parte elegida en el color de la tarjeta. */
+function Figure({ accent, highlight, value }: Pick<StatItem, 'accent' | 'highlight' | 'value'>) {
+  const word = highlight?.trim()
+  const parts = word ? splitHighlight(value, word) : null
+  if (!parts) return <>{value}</>
 
   return (
-    <Section id={anchorId} surface={surface}>
-      {title ? <h2 className="font-editorial text-h1 max-w-2xl text-balance">{title}</h2> : null}
+    <>
+      {parts.before}
+      <span className={cn('stat-card__mark', `stat-card__mark--${accent ?? 'boreas'}`)}>
+        {parts.match}
+      </span>
+      {parts.after}
+    </>
+  )
+}
 
-      <RichText data={intro} className="mt-6 max-w-2xl" onAnchor={isAnchor} />
+function Visual({ item }: { item: StatItem }) {
+  if (item.visual === 'people') return <PeoplePictogram />
+  if (item.visual === 'yearCost')
+    return <YearCost annualAmount={item.annualAmount ?? ONE_TRILLION} />
+  return null
+}
 
-      <dl className="mt-16 grid gap-x-12 gap-y-14 md:grid-cols-3">
-        {items.map((item, position) => (
-          <div key={item.id ?? `${item.value}-${position}`}>
-            {/* La cifra se lee primero: va antes en el DOM y en la jerarquía. */}
-            <dt className="font-editorial text-display leading-none">{item.value}</dt>
-            <dd
-              className={cn(
-                'text-body mt-5 max-w-[40ch] text-pretty',
-                isAnchor ? 'text-on-anchor/80' : 'text-ink/80',
-              )}
-            >
-              {item.label}
-              {item.source ? (
-                <span
-                  className={cn(
-                    'text-caption mt-2 block',
-                    isAnchor ? 'text-on-anchor/70' : 'text-ink/70',
-                  )}
-                >
-                  {item.source}
-                </span>
+/**
+ * Server Component. Cifras en tarjetas: cada una se lee como una frase que sale
+ * del número ("En el mundo, 1 de cada 8 personas vive…") y abajo lleva el
+ * gráfico que la vuelve visible. Al cliente solo bajan la entrada en pantalla y
+ * el contador del año.
+ */
+export function Stats({ anchorId, eyebrow, items, source, title }: StatsProps) {
+  if (!items?.length) return null
+
+  const titleId = `${anchorId}-titulo`
+
+  return (
+    <StatsReveal id={anchorId} className="stats" labelledBy={title ? titleId : undefined}>
+      <Container>
+        {eyebrow || title || source ? (
+          <header className="stats__head" data-reveal-piece>
+            <div>
+              {eyebrow ? <p className="stats__eyebrow">{eyebrow}</p> : null}
+              {title ? (
+                <h2 id={titleId} className="stats__title">
+                  {title}
+                </h2>
               ) : null}
-            </dd>
-          </div>
-        ))}
-      </dl>
-    </Section>
+            </div>
+            {source ? <p className="stats__source">{source}</p> : null}
+          </header>
+        ) : null}
+
+        <ul className="stats__cards" data-count={items.length}>
+          {items.map((item, index) => {
+            const hasVisual = item.visual === 'people' || item.visual === 'yearCost'
+
+            return (
+              <li
+                key={item.id ?? `${item.value}-${index}`}
+                className="stat-card"
+                data-reveal-piece
+                style={{ '--d': `${index * CARD_STEP_MS}ms` } as CSSProperties}
+              >
+                {item.lead ? <p className="stat-card__lead">{item.lead}</p> : null}
+                {/* La cifra sube desde su propia máscara, como el titular del hero. */}
+                <p className="stat-card__value">
+                  <span>
+                    <Figure accent={item.accent} highlight={item.highlight} value={item.value} />
+                  </span>
+                </p>
+                <p className="stat-card__text">{item.label}</p>
+                {hasVisual ? (
+                  <div className="stat-card__visual">
+                    <Visual item={item} />
+                  </div>
+                ) : null}
+              </li>
+            )
+          })}
+        </ul>
+      </Container>
+    </StatsReveal>
   )
 }

@@ -20,8 +20,12 @@ const fraunces = Fraunces({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-fraunces',
-  // Solo el eje de peso. Fraunces trae además SOFT, WONK y opsz; declararlos
-  // sumaba 70 KB al archivo y el sistema no varía ninguno de los tres.
+  // El eje óptico existe para el hero, que usa el corte 9pt del manual; el
+  // resto del sitio lo ignora (`font-optical-sizing: none` en globals.css).
+  // SOFT y WONK quedan fuera: nadie los usa. La cursiva es para la palabra
+  // destacada del titular.
+  axes: ['opsz'],
+  style: ['normal', 'italic'],
 })
 
 const dmSans = DM_Sans({

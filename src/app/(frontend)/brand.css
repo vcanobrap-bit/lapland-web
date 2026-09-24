@@ -1,0 +1,55 @@
+/**
+ * brand.css — Manual de Identidad Visual v1.0 (septiembre 2026).
+ *
+ * El manual es la referencia vigente de la marca. Se declara aparte de
+ * tokens.css porque ese archivo es una copia literal del repositorio del
+ * design system anterior y no debe divergir de él.
+ *
+ * Hoy lo usan el encabezado, el hero y la sección de datos. El resto sigue con
+ * tokens.css hasta que se rediseñe; cuando todas migren, este archivo pasa a
+ * ser la única fuente.
+ */
+
+:root {
+  /* === COLOR — tres familias de igual protagonismo === */
+
+  /* Teal */
+  --lap-brand-teal: #48747c;
+  --lap-brand-teal-dark: #315157;
+  --lap-brand-teal-mid: #90c1c6;
+  --lap-brand-teal-light: #c4edf1;
+
+  /* Verde */
+  --lap-brand-verde: #7c9c80;
+  --lap-brand-verde-dark: #4c624f;
+  --lap-brand-verde-mid: #d5ecc9;
+  --lap-brand-verde-light: #e8f7e2;
+
+  /* Boreas */
+  --lap-brand-boreas: #785f84;
+  --lap-brand-boreas-dark: #4e3959;
+  --lap-brand-boreas-mid: #bd8cd3;
+  --lap-brand-boreas-light: #f1d1ff;
+
+  /* Texto: el verde noche de los titulares y un gris verdoso para el cuerpo.
+     El gris del manual (#a6a6a6) no alcanza contraste AA sobre blanco. */
+  --lap-brand-ink: #182c2a;
+  --lap-brand-ink-soft: #4f5f5c;
+
+  /* === SUPERFICIES === */
+  /* El manual trabaja sobre blanco; las tarjetas, en un gris muy claro. */
+  --lap-brand-paper: #ffffff;
+  --lap-brand-card: #f5f5f5;
+
+  /* === MOVIMIENTO === */
+  /* Salida larga y suave: entradas de texto y cambios de estado. */
+  --lap-ease-out: cubic-bezier(0.22, 0.8, 0.24, 1);
+  /* Simétrica y lenta: fundidos, luz, todo lo que "respira". */
+  --lap-ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* === ENCABEZADO === */
+  /* Alto sobre el hero y alto compacto al bajar. El compacto es el que
+     descuentan las anclas, porque al navegar el encabezado ya está compacto. */
+  --lap-header-tall: 5.5rem;
+  --lap-header-compact: 4.25rem;
+}

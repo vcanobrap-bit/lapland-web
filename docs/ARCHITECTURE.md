@@ -12,7 +12,7 @@ siguientes.
 | Payload corre dentro de la app Next         | Payload 3 se monta en el App Router. Un solo deploy, una sola base de código, sin CORS ni servidor aparte.                                                   |
 | Bloques en vez de secciones fijas           | Las secciones fijas no se reutilizan: el próximo proyecto quiere otras. Con bloques, el cliente ordena la página y sumar una sección es agregar una carpeta. |
 | Los datos del sitio viven en `SiteSettings` | El email o el teléfono se editan en un solo lugar y valen en el footer y en la sección de contacto.                                                          |
-| Server Components por defecto               | Solo cruza al cliente lo que necesita estado. Hoy eso es el slider del hero y nada más.                                                                      |
+| Server Components por defecto               | Solo cruza al cliente lo que necesita estado o el navegador: la aurora del hero, el menú móvil, el formulario.                                               |
 | Los tipos del CMS no se escriben a mano     | `payload generate:types` los deriva del schema, así no pueden desincronizarse.                                                                               |
 | Next 15.4.11 fijado                         | `@payloadcms/next` 3.88 no admite Next 15.5.                                                                                                                 |
 
@@ -22,6 +22,9 @@ siguientes.
 src/
 ├── app/
 │   ├── (frontend)/          El sitio público
+│   │   ├── tokens.css       Design system anterior (copia literal)
+│   │   ├── brand.css        Manual de identidad v1.0: paleta, movimiento
+│   │   └── hero.css         Encabezado, menú móvil y hero
 │   ├── (payload)/           Admin y API. Generado por Payload, no se edita
 │   └── next/                Entrada y salida del modo borrador
 ├── blocks/                  Una carpeta por sección: config del CMS + componente
@@ -33,11 +36,10 @@ src/
 ├── globals/                 Home (bloques), SiteSettings (datos del sitio)
 │   └── hooks/               Hooks de Payload: revalidación al publicar
 ├── components/
-│   ├── layout/              Footer, banner de borrador
+│   ├── layout/              Encabezado, menú móvil, footer, banner de borrador
 │   ├── ui/                  Container, Section, MediaImage
 │   └── RichText.tsx         Render y estilos del contenido richText
 ├── fields/                  Campos reutilizables entre bloques
-├── hooks/                   Hooks de React (solo Client Components)
 ├── access/                  Reglas de permisos compartidas
 ├── lib/
 │   ├── payload.ts           Único punto que instancia Payload
@@ -73,22 +75,66 @@ Reglas que sostienen esto:
 Server Component por defecto. Client Component solo donde hay estado, efectos o
 interacción real.
 
-| Componente                                 | Tipo                                              |
-| ------------------------------------------ | ------------------------------------------------- |
-| `page.tsx`, `layout.tsx`                   | Server: obtienen datos                            |
-| About, WhatWeDo, Services, Contact, Footer | Server: solo muestran contenido                   |
-| `Hero/Component.tsx`                       | Server: título, subtítulo y botón no necesitan JS |
-| `Hero/HeroSlider.tsx`                      | **Client**: slide activo, autoplay, navegación    |
-| `hooks/useCarousel.ts`                     | Client: lógica del slider                         |
+| Componente                                 | Tipo                                          |
+| ------------------------------------------ | --------------------------------------------- |
+| `page.tsx`, `layout.tsx`                   | Server: obtienen datos                        |
+| About, WhatWeDo, Services, Contact, Footer | Server: solo muestran contenido               |
+| `Hero/Component.tsx`                       | Server: titular, textos, botones e imágenes   |
+| `Hero/AuroraCanvas.tsx`                    | **Client**: aurora en WebGL                   |
+| `Hero/HeroParallax.tsx`                    | **Client**: la escena sigue apenas al puntero |
+| `Stats/Component.tsx`                      | Server: tarjetas, cifras y pictograma         |
+| `Stats/StatsReveal.tsx`                    | **Client**: marca la entrada en pantalla      |
+| `Stats/YearCost.tsx`                       | **Client**: costo del año, contando en vivo   |
+| `layout/Header.tsx`                        | Server: logos y menú desde el CMS             |
+| `layout/HeaderFrame.tsx`                   | **Client**: marca `data-scrolled` al bajar    |
+| `layout/MobileMenu.tsx`                    | **Client**: abierto/cerrado, foco, Escape     |
 
-Ni el hero ni la sección de contacto son Client Components enteros. Cada uno es
-un Server Component que monta adentro la única pieza que necesita cliente: el
-slider en un caso, el formulario en el otro. El hero además le pasa al slider
-solo los campos que usa, no el documento de Media completo.
+Ni el hero ni el encabezado ni las secciones de datos y contacto son Client Components
+enteros. Cada uno es un Server Component que monta adentro solo las piezas que
+necesitan el navegador. Las imágenes del hero y los logos llegan a esas piezas
+como children ya renderizados en el servidor.
 
-El slider está construido sobre `scroll-snap`, así que funciona sin JavaScript
-—scroll nativo y swipe en móvil— y la hidratación solo agrega autoplay, flechas
-e indicadores. El autoplay respeta `prefers-reduced-motion`.
+### Encabezado y hero
+
+Son las primeras piezas rediseñadas con el Manual de Identidad Visual v1.0. Sus
+tokens viven en `brand.css`, aparte de `tokens.css`, que sigue siendo copia
+literal del design system anterior y lo usa el resto del sitio. Sus estilos
+viven en `hero.css` porque dependen de capas, estados y coreografías de
+movimiento que en clases utilitarias quedarían ilegibles.
+
+- **La escena del hero son tres capas**: imagen de fondo, aurora (WebGL) y un
+  primer plano opcional con el cielo transparente. Con primer plano, la aurora
+  pasa por detrás de las montañas. Ambas imágenes usan el punto de enfoque del
+  fondo, así que siempre calzan.
+- **El encabezado flota sobre el hero** solo si la página abre con uno. Se
+  detecta en CSS con `body:has([data-hero-overlay])`: el layout no necesita
+  saber qué bloque va primero y, si el cliente quita el hero, el encabezado
+  vuelve a ser sólido. Es `sticky` con margen negativo; alto y margen cambian
+  juntos al bajar, así que el contenido no salta.
+- **El menú móvil se monta en `<body>` con un portal.** Dentro del encabezado
+  quedaría atrapado: su `backdrop-filter` lo vuelve contenedor de los hijos con
+  `position: fixed`.
+- **Movimiento**: todo respeta `prefers-reduced-motion`. La aurora se dibuja solo
+  mientras el hero está en pantalla y sin WebGL el hero se ve con la foto sola.
+- **Fraunces** se carga con su eje óptico para el corte 9pt del manual.
+  `font-optical-sizing: none` en `globals.css` evita que ese eje cambie cómo se
+  ven los titulares de las demás secciones.
+
+### Datos
+
+La sección que sigue al hero, también con el manual. Sus estilos viven en
+`stats.css`.
+
+- **Cada tarjeta se lee como una frase**: lo que va antes («En el mundo»), la
+  cifra y lo que significa. El cliente elige qué parte de la cifra va en color
+  (Boreas, Verde o Teal); no hay cursiva.
+- **Gráficos**: el pictograma de 1 de cada 8 personas es arte fijo de la marca,
+  recortado en capas en `public/brand/personas/` para animar la entrada. El
+  costo acumulado del año se calcula en el navegador, porque depende de la
+  fecha de quien mira y la página es estática.
+- **Entrada**: `StatsReveal` marca la sección con `data-reveal` y cada pieza con
+  `data-in` al aparecer. Las transiciones viven solo en el estado `data-in`, así
+  que sin JavaScript o con movimiento reducido todo se ve quieto y completo.
 
 ### Formulario de contacto
 
@@ -173,8 +219,9 @@ publicado: usuario administrador, medios de referencia, ajustes del sitio y las
 siete secciones de la home. Existe porque un deploy nuevo arrancaría con el
 panel vacío y siete secciones que cargar a mano.
 
-Genera sus propias imágenes con sharp —placeholders en la paleta de apoyo y una
-tarjeta para compartir de 1200×630—, así que no depende de archivos externos.
+Genera con sharp los placeholders de las secciones y la tarjeta para compartir
+de 1200×630. Deja la sección de datos justo después del hero. Los logos y la foto del hero (con su recorte sin cielo) son
+archivos reales de la marca y viven en `src/scripts/seed-assets/`.
 
 Corre fuera de una request de Next, por lo que `revalidateTag` no está
 disponible: el seed lo declara con `context.disableRevalidate` y el hook además

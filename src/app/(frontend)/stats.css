@@ -1,0 +1,316 @@
+/**
+ * stats.css — Sección de datos, según el Manual de Identidad Visual v1.0.
+ *
+ * Tarjetas gemelas en gris claro sobre blanco. Cada una se lee como una frase
+ * que sale de la cifra: "En el mundo, 1 de cada 8 personas vive…". El título
+ * de sección manda; las cifras van un paso más abajo y se destacan solo con
+ * color, sin cursiva.
+ *
+ * La entrada la dispara StatsReveal: marca la sección con `data-reveal` y cada
+ * pieza con `data-in` al aparecer. Las transiciones viven solo en el estado
+ * `data-in`, así esconder es instantáneo y solo la entrada se anima. Sin JS o
+ * con movimiento reducido no hay marcas y todo se ve quieto.
+ */
+
+.stats {
+  padding-block: clamp(64px, 8vw, 120px);
+  background: var(--lap-brand-paper);
+  color: var(--lap-brand-ink);
+}
+
+/* --- Encabezado ------------------------------------------------------------ */
+/* La fuente acompaña al título a la derecha; en móvil baja debajo de él. */
+.stats__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 16px 48px;
+  margin-bottom: clamp(32px, 4vw, 56px);
+}
+.stats__eyebrow {
+  margin: 0;
+  font:
+    600 12px/1.2 var(--font-inter),
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--lap-brand-teal);
+}
+.stats__title {
+  margin: 14px 0 0;
+  max-width: 20em;
+  font:
+    700 clamp(32px, 3.4vw, 50px) / 1.1 var(--font-inter),
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+  letter-spacing: -0.028em;
+  text-wrap: balance;
+}
+.stats__source {
+  margin: 0;
+  font:
+    500 13px/1.4 var(--font-inter),
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+  color: var(--lap-brand-ink-soft);
+}
+
+/* --- Tarjetas -------------------------------------------------------------- */
+.stats__cards {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(16px, 2.2vw, 32px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (min-width: 768px) {
+  .stats__cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1024px) {
+  .stats__cards[data-count='3'] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(28px, 3.4vw, 52px);
+  border-radius: clamp(16px, 1.4vw, 22px);
+  background: var(--lap-brand-card);
+}
+.stat-card__lead {
+  margin: 0 0 0.55em;
+  font:
+    500 clamp(15px, 1.15vw, 18px) / 1.2 var(--font-inter),
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+  letter-spacing: -0.01em;
+  color: var(--lap-brand-ink-soft);
+}
+/* Fraunces 9pt, igual que el titular del hero. */
+.stat-card__value {
+  margin: 0;
+  overflow: hidden;
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-weight: 600;
+  font-variation-settings: 'opsz' 9;
+  font-size: clamp(30px, 2.9vw, 44px);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+}
+.stat-card__value > span {
+  display: inline-block;
+}
+.stat-card__mark--boreas {
+  color: var(--lap-brand-boreas);
+}
+.stat-card__mark--verde {
+  color: var(--lap-brand-verde);
+}
+.stat-card__mark--teal {
+  color: var(--lap-brand-teal);
+}
+.stat-card__text {
+  margin: 16px 0 0;
+  max-width: 28em;
+  font:
+    500 clamp(16px, 1.15vw, 18px) / 1.6 var(--font-inter),
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+  letter-spacing: -0.008em;
+  color: var(--lap-brand-ink-soft);
+  text-wrap: pretty;
+}
+/* El gráfico se apoya abajo: en tarjetas vecinas queda a la misma altura. */
+.stat-card__visual {
+  margin-top: auto;
+  padding-top: clamp(32px, 3.4vw, 48px);
+}
+
+/* --- Pictograma: 1 de cada 8 ----------------------------------------------- */
+.people {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  aspect-ratio: 975 / 227;
+}
+.people img {
+  position: absolute;
+  max-width: none;
+}
+.people__ghost {
+  opacity: 0;
+}
+
+/* --- Costo acumulado del año ------------------------------------------------ */
+.year-cost {
+  display: grid;
+}
+.year-cost__value {
+  margin: 0;
+  font:
+    600 clamp(16px, 1.25vw, 19px) / 1.1 var(--font-inter),
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+.year-cost__track {
+  position: relative;
+  height: 10px;
+  margin-top: 40px;
+  border-radius: 999px;
+  background: #e6ebea;
+}
+.year-cost__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(var(--p, 0) * 100%);
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    var(--lap-brand-verde-mid),
+    var(--lap-brand-teal-mid) 55%,
+    var(--lap-brand-boreas-mid)
+  );
+}
+.year-cost__today {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: calc(var(--p, 0) * 100%);
+  transform: translateX(-50%);
+  font:
+    600 11px/1 var(--font-inter),
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+  color: var(--lap-brand-boreas);
+  white-space: nowrap;
+}
+/* La marca de hoy baja hasta cruzar la barra. */
+.year-cost__today::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 4px);
+  width: 1px;
+  height: 24px;
+  background: var(--lap-brand-boreas);
+}
+.year-cost__months {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  margin-top: 10px;
+  font:
+    500 10px/1 var(--font-inter),
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lap-brand-ink-soft);
+}
+
+/* --- Entrada ---------------------------------------------------------------- */
+.stats[data-reveal] :is(.stats__head, .stat-card):not([data-in]) {
+  opacity: 0;
+  transform: translateY(24px);
+}
+.stats[data-reveal] :is(.stats__head, .stat-card)[data-in] {
+  transition:
+    opacity 1s var(--lap-ease-soft) var(--d, 0ms),
+    transform 1.2s var(--lap-ease-out) var(--d, 0ms);
+}
+
+.stats[data-reveal] .stat-card:not([data-in]) .stat-card__value > span {
+  transform: translateY(106%);
+}
+.stats[data-reveal] .stat-card[data-in] .stat-card__value > span {
+  transition: transform 1.2s var(--lap-ease-out) calc(var(--d, 0ms) + 280ms);
+}
+
+/* Las ocho personas entran una tras otra; después la primera se enciende. */
+.stats[data-reveal] .stat-card:not([data-in]) .people__fig {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.stats[data-reveal] .stat-card[data-in] .people__fig {
+  transition:
+    opacity 0.8s var(--lap-ease-soft),
+    transform 1s var(--lap-ease-out);
+  transition-delay: calc(var(--d, 0ms) + 350ms + var(--i) * 80ms);
+}
+.stats[data-reveal] .stat-card[data-in] .people__ghost {
+  animation: people-ghost 2.6s var(--lap-ease-soft) calc(var(--d, 0ms) + 350ms) both;
+}
+@keyframes people-ghost {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  31% {
+    opacity: 1;
+    transform: none;
+  }
+  48% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: none;
+  }
+}
+.stats[data-reveal] .stat-card:not([data-in]) .people__hit {
+  opacity: 0;
+  transform: scale(0.94);
+}
+.stats[data-reveal] .stat-card[data-in] .people__hit {
+  transition:
+    opacity 1.4s var(--lap-ease-soft) calc(var(--d, 0ms) + 1.5s),
+    transform 1.6s var(--lap-ease-out) calc(var(--d, 0ms) + 1.5s);
+}
+
+/* La barra del año se llena hasta hoy y recién entonces aparece la marca. */
+.stats[data-reveal] .stat-card:not([data-in]) .year-cost__fill {
+  width: 0;
+}
+.stats[data-reveal] .stat-card[data-in] .year-cost__fill {
+  transition: width 2.4s var(--lap-ease-soft) calc(var(--d, 0ms) + 500ms);
+}
+.stats[data-reveal] .stat-card:not([data-in]) .year-cost__today {
+  opacity: 0;
+}
+.stats[data-reveal] .stat-card[data-in] .year-cost__today {
+  transition: opacity 0.8s var(--lap-ease-soft) calc(var(--d, 0ms) + 2.6s);
+}
+
+/* --- Móvil ------------------------------------------------------------------ */
+@media (max-width: 767px) {
+  .stats__head {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .stats__title {
+    font-size: clamp(28px, 8.2vw, 34px);
+  }
+  .stat-card__value {
+    font-size: clamp(26px, 7.2vw, 32px);
+  }
+  .year-cost__months {
+    font-size: 9.5px;
+    letter-spacing: 0;
+  }
+}

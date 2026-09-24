@@ -1,3 +1,7 @@
+import { readFile } from 'node:fs/promises'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
 import config from '@payload-config'
 import { getPayload } from 'payload'
 
@@ -22,6 +26,10 @@ const ADMIN = {
   email: process.env.SEED_EMAIL ?? 'editor@lapland.cl',
   password: process.env.SEED_PASSWORD ?? 'Lapland123!',
 }
+
+/** Fotos y logos reales de la marca, versionados junto al seed. */
+const ASSETS = path.join(path.dirname(fileURLToPath(import.meta.url)), 'seed-assets')
+const asset = (file: string) => readFile(path.join(ASSETS, file))
 
 const BRAND = {
   name: 'Lapland',
@@ -49,7 +57,14 @@ const seed = async (): Promise<void> => {
    * corrida del seed dejaría una copia más y la biblioteca del cliente se
    * llenaría de placeholders casi idénticos.
    */
-  const upload = async (name: string, alt: string, data: Buffer, mimeType: string) => {
+  const upload = async (
+    name: string,
+    alt: string,
+    data: Buffer,
+    mimeType: string,
+    // Punto de enfoque en %: decide el encuadre de la imagen al recortarse.
+    focal?: { focalX: number; focalY: number },
+  ) => {
     const existing = await payload.find({
       collection: 'media',
       where: { alt: { equals: alt } },
@@ -62,29 +77,43 @@ const seed = async (): Promise<void> => {
 
     const doc = await payload.create({
       collection: 'media',
-      data: { alt },
+      data: { alt, ...focal },
       file: { name, data, mimetype: mimeType, size: data.byteLength },
     })
     return doc.id
   }
 
-  const [slideA, slideB, share] = await Promise.all([
-    placeholder(0),
+  const [aboutImage, share, logo, logoLight, heroBackground, heroForeground] = await Promise.all([
     placeholder(1),
     shareImage(BRAND.name, BRAND.tagline),
+    asset('logo.png'),
+    asset('logo-claro.png'),
+    asset('hero-montanas.jpg'),
+    asset('hero-montanas-recorte.webp'),
   ])
 
-  const slideAId = await upload(
-    'hero-1.jpg',
-    'Equipo en una sesión de diagnóstico organizacional',
-    slideA,
-    'image/jpeg',
-  )
-  const slideBId = await upload(
+  const aboutImageId = await upload(
     'hero-2.jpg',
     'Sesión de acompañamiento a liderazgos',
-    slideB,
+    aboutImage,
     'image/jpeg',
+  )
+  const logoId = await upload('logo.png', 'Lapland', logo, 'image/png')
+  const logoLightId = await upload('logo-claro.png', 'Lapland (blanco)', logoLight, 'image/png')
+  // El enfoque bajo (70%) recorta cielo y no montaña: el texto va sobre las cumbres.
+  const heroBackgroundId = await upload(
+    'hero-montanas.jpg',
+    'Cordillera en capas bajo un cielo de nubes claras',
+    heroBackground,
+    'image/jpeg',
+    { focalX: 50, focalY: 70 },
+  )
+  const heroForegroundId = await upload(
+    'hero-montanas-recorte.webp',
+    'Cordillera en capas, recortada sin el cielo',
+    heroForeground,
+    'image/webp',
+    { focalX: 50, focalY: 70 },
   )
   const shareId = await upload(
     'compartir.png',
@@ -102,7 +131,7 @@ const seed = async (): Promise<void> => {
     slug: 'site-settings',
     context,
     data: {
-      brand: { name: BRAND.name, tagline: BRAND.tagline },
+      brand: { name: BRAND.name, logo: logoId, logoLight: logoLightId, tagline: BRAND.tagline },
       nav: [
         { label: 'Quiénes somos', href: '#quienes-somos' },
         { label: 'Propósito', href: '#que-hacemos' },
@@ -138,15 +167,45 @@ const seed = async (): Promise<void> => {
       layout: [
         {
           blockType: 'hero',
-          surface: 'primary',
           anchor: 'inicio',
-          title: 'Cuidar la salud mental laboral es estrategia.',
+          // El salto de línea es el corte del titular.
+          title: 'Cuidar la salud laboral\nes estrategia',
+          highlight: 'estrategia',
           subtitle:
-            'Para líderes de organizaciones con los más altos estándares de salud, bienestar y seguridad laboral.',
-          cta: { label: 'Conversemos', href: '#contacto' },
-          slides: [
-            { image: slideAId, title: 'Diagnóstico de riesgos psicosociales' },
-            { image: slideBId, title: 'Acompañamiento a liderazgos' },
+            'Leemos cómo tu organización sostiene hoy a sus personas y construimos con tus líderes el sistema para que el desempeño y el bienestar crezcan juntos.',
+          cta: { label: 'Agenda una conversación', href: '#contacto' },
+          secondaryCta: { label: 'Ver cómo trabajamos', href: '#servicios' },
+          background: heroBackgroundId,
+          foreground: heroForegroundId,
+          aurora: true,
+        },
+        {
+          // Justo después del hero: la evidencia que respalda la promesa.
+          blockType: 'stats',
+          anchor: 'datos',
+          eyebrow: 'Salud mental y trabajo',
+          title: 'Una erosión silenciosa de las personas que sostienen los resultados.',
+          source: 'Fuente: OMS y OIT, 2022',
+          items: [
+            {
+              lead: 'En el mundo',
+              value: '1 de cada 8',
+              highlight: '1',
+              accent: 'boreas',
+              label:
+                'personas vive con un trastorno de salud mental y esto representa una de las principales causas de ausentismo laboral.',
+              visual: 'people',
+            },
+            {
+              lead: 'Más de',
+              value: 'US$ 1 billón',
+              highlight: '1 billón',
+              accent: 'verde',
+              label:
+                'al año le cuestan a la economía mundial el estrés laboral y los riesgos psicosociales.',
+              visual: 'yearCost',
+              annualAmount: 1_000_000_000_000,
+            },
           ],
         },
         {
@@ -154,36 +213,12 @@ const seed = async (): Promise<void> => {
           surface: 'primary',
           anchor: 'quienes-somos',
           title: 'Quiénes somos',
-          image: slideBId,
+          image: aboutImageId,
           content: p(
             'Anhelamos y trabajamos para crear espacios laborales que cuiden a las personas, donde el ',
             bold('bienestar, la salud mental y la seguridad'),
             ' impulsen una sostenibilidad auténtica y una excelencia organizacional duradera.',
           ),
-        },
-        {
-          // El único momento oscuro de la página: las cifras son lo que más pesa.
-          blockType: 'stats',
-          surface: 'anchor',
-          anchor: 'datos',
-          title: '¿Sabías que…?',
-          items: [
-            {
-              value: '1 de cada 8',
-              label:
-                'personas en el mundo vive con un trastorno de salud mental, una de las principales causas de ausentismo laboral.',
-            },
-            {
-              value: 'US$ 1 billón',
-              label:
-                'le cuestan cada año el estrés laboral y los riesgos psicosociales a la economía mundial.',
-            },
-            {
-              value: '40–50 %',
-              label:
-                'menos síntomas de estrés y ansiedad presentan los equipos que perciben alta seguridad psicológica de su líder.',
-            },
-          ],
         },
         {
           blockType: 'whatWeDo',

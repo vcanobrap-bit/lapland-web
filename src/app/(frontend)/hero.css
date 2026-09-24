@@ -1,0 +1,668 @@
+/**
+ * hero.css — Encabezado, menú móvil y hero.
+ *
+ * Son las primeras piezas rediseñadas con el Manual de Identidad Visual v1.0
+ * (brand.css). Viven en su propio archivo porque dependen de capas, estados y
+ * coreografías de movimiento que en clases utilitarias quedarían ilegibles. El
+ * resto del sitio sigue en Tailwind puro.
+ *
+ * Lenguaje de movimiento: todo entra con calma y nada destella. Fundidos
+ * largos, luz que aparece de a poco, desplazamientos cortos.
+ */
+
+/* ============================== ENCABEZADO ============================== */
+
+.site-header {
+  --h: var(--lap-header-compact);
+  --h-fg: var(--lap-brand-ink-soft);
+  --h-fg-strong: var(--lap-brand-ink);
+  --h-line: color-mix(in srgb, var(--lap-brand-ink) 24%, transparent);
+  --h-pill-ink: #fff;
+
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: var(--h);
+  background: rgb(255 255 255 / 0.84);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  box-shadow: 0 1px 0 var(--lap-color-surface-support-light);
+  transition:
+    height 0.5s var(--lap-ease-out),
+    margin-bottom 0.5s var(--lap-ease-out),
+    background-color 0.5s var(--lap-ease-out),
+    box-shadow 0.5s var(--lap-ease-out);
+}
+
+/*
+ * Sobre un hero con fotografía el encabezado flota encima: es más alto y el
+ * margen negativo lo saca del flujo sin dejar de ser sticky. Alto y margen
+ * cambian juntos al bajar, así que el contenido nunca salta.
+ *
+ * Se detecta con :has() para que el layout no tenga que saber qué bloque abre
+ * la página: si el cliente quita el hero, el encabezado vuelve a ser sólido.
+ */
+body:has([data-hero-overlay]) .site-header {
+  --h: var(--lap-header-tall);
+  margin-bottom: calc(var(--h) * -1);
+}
+body:has([data-hero-overlay]) .site-header[data-scrolled='true'] {
+  --h: var(--lap-header-compact);
+}
+html:not([data-menu-open]) body:has([data-hero-overlay]) .site-header:not([data-scrolled='true']) {
+  --h-fg: rgb(255 255 255 / 0.8);
+  --h-fg-strong: #fff;
+  --h-line: rgb(255 255 255 / 0.7);
+  --h-pill-ink: var(--lap-brand-ink);
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+}
+/* Con el menú móvil abierto solo queda la X, sobre el blanco del menú. */
+html[data-menu-open] .site-header {
+  --h-fg-strong: color-mix(in srgb, var(--lap-brand-ink-soft) 70%, transparent);
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+}
+
+/* --- Logo --------------------------------------------------------------- */
+.site-header__brand {
+  position: relative;
+  display: block;
+  width: 92px;
+  transition:
+    width 0.5s var(--lap-ease-out),
+    opacity 0.4s var(--lap-ease-soft);
+}
+@media (min-width: 768px) {
+  .site-header__brand {
+    width: 108px;
+  }
+}
+.site-header[data-scrolled='true'] .site-header__brand {
+  width: 86px;
+}
+html[data-menu-open] .site-header__brand {
+  opacity: 0;
+  pointer-events: none;
+}
+.site-header__logo {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition:
+    opacity 0.5s var(--lap-ease-soft),
+    filter 0.5s var(--lap-ease-soft);
+}
+.site-header__logo--light {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+.site-header__name {
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-size: 1.375rem;
+  color: var(--h-fg-strong);
+  transition: color 0.5s var(--lap-ease-soft);
+}
+/* Sobre la foto se muestra el logo claro, si el cliente lo cargó. */
+html:not([data-menu-open])
+  body:has([data-hero-overlay])
+  .site-header:not([data-scrolled='true'])
+  .site-header__logo--light {
+  opacity: 1;
+}
+html:not([data-menu-open])
+  body:has([data-hero-overlay])
+  .site-header:not([data-scrolled='true'])
+  .site-header__logo--dark {
+  opacity: 0;
+}
+/* Sin logo claro cargado, el logo de color se pasa a blanco. */
+html:not([data-menu-open])
+  body:has([data-hero-overlay])
+  .site-header:not([data-scrolled='true'])
+  .site-header__logo--solo {
+  filter: brightness(0) invert(1);
+}
+
+/* --- Navegación de escritorio -------------------------------------------- */
+.site-nav a {
+  position: relative;
+  padding-block: 6px;
+  font:
+    500 15px/1 var(--font-inter),
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+  letter-spacing: -0.01em;
+  color: var(--h-fg);
+  text-decoration: none;
+  transition: color 0.3s var(--lap-ease-soft);
+}
+.site-nav a:not(.is-pill)::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.45s var(--lap-ease-out);
+}
+.site-nav a:not(.is-pill):hover {
+  color: var(--h-fg-strong);
+}
+.site-nav a:not(.is-pill):hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+.site-nav a.is-pill {
+  padding: 13px 24px;
+  border: 1.5px solid var(--h-line);
+  border-radius: 999px;
+  color: var(--h-fg-strong);
+  transition:
+    background-color 0.3s var(--lap-ease-soft),
+    color 0.3s var(--lap-ease-soft),
+    border-color 0.3s var(--lap-ease-soft);
+}
+.site-nav a.is-pill:hover {
+  background: var(--h-fg-strong);
+  border-color: var(--h-fg-strong);
+  color: var(--h-pill-ink);
+}
+
+/* --- Botón del menú móvil ------------------------------------------------ */
+.menu-toggle {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  color: var(--h-fg-strong);
+}
+.menu-toggle span {
+  position: absolute;
+  left: 11px;
+  right: 11px;
+  height: 1.5px;
+  background: currentColor;
+  transition:
+    transform 0.6s var(--lap-ease-soft),
+    top 0.6s var(--lap-ease-soft);
+}
+.menu-toggle span:first-child {
+  top: 17px;
+}
+.menu-toggle span:last-child {
+  top: 26px;
+}
+.menu-toggle[aria-expanded='true'] span:first-child {
+  top: 21.5px;
+  transform: rotate(45deg);
+}
+.menu-toggle[aria-expanded='true'] span:last-child {
+  top: 21.5px;
+  transform: rotate(-45deg);
+}
+
+/* ============================== MENÚ MÓVIL ============================== */
+
+/*
+ * Pantalla blanca con el logo centrado y los enlaces en Inter. Al abrir, el
+ * fondo se funde, el logo baja apenas y los enlaces suben uno tras otro. Al
+ * cerrar todo se desvanece junto y rápido, para no hacer esperar.
+ */
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(36px, 7vh, 56px);
+  padding: var(--lap-header-tall) 1.5rem 18vh;
+  background:
+    radial-gradient(90% 40% at 50% 108%, rgb(213 236 201 / 0.55), transparent 70%),
+    radial-gradient(60% 30% at 92% 100%, rgb(241 209 255 / 0.45), transparent 70%), #fff;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity 0.35s var(--lap-ease-soft),
+    visibility 0s linear 0.35s;
+}
+.mobile-menu.is-open {
+  visibility: visible;
+  opacity: 1;
+  transition:
+    opacity 0.55s var(--lap-ease-soft),
+    visibility 0s;
+}
+@media (min-width: 768px) {
+  .mobile-menu {
+    display: none;
+  }
+}
+
+.mobile-menu__logo {
+  width: 112px;
+}
+.mobile-menu__logo img {
+  width: 100%;
+  height: auto;
+}
+.mobile-menu__name {
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-size: 2rem;
+  color: var(--lap-brand-teal);
+}
+.mobile-menu__nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+.mobile-menu__nav a {
+  position: relative;
+  padding-block: 4px;
+  font:
+    600 26px/1.2 var(--font-inter),
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+  letter-spacing: -0.02em;
+  color: var(--lap-brand-ink-soft);
+  text-decoration: none;
+}
+.mobile-menu__nav a:is(:hover, :focus-visible, :active) {
+  color: var(--lap-brand-ink);
+}
+.mobile-menu__nav a.is-pill {
+  color: var(--lap-brand-teal);
+}
+/* El mismo trazo de aurora del titular, como subrayado al tocar. */
+.mobile-menu__nav a::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -2px;
+  width: 44%;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--lap-brand-verde-mid),
+    var(--lap-brand-teal-mid),
+    var(--lap-brand-boreas-mid)
+  );
+  transform: translateX(-50%) scaleX(0);
+  transition: transform 0.6s var(--lap-ease-soft);
+}
+.mobile-menu__nav a:is(:hover, :focus-visible, :active)::after {
+  transform: translateX(-50%) scaleX(1);
+}
+/* La acuarela de montañas de la portada del manual, apoyada abajo. */
+.mobile-menu__art {
+  position: absolute;
+  inset: auto 0 0 0;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+
+/* Coreografía: estado cerrado, y luego la entrada escalonada. */
+.mobile-menu__logo,
+.mobile-menu__nav a,
+.mobile-menu__art {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.3s var(--lap-ease-soft),
+    transform 0.3s var(--lap-ease-soft),
+    color 0.4s var(--lap-ease-soft);
+}
+.mobile-menu__logo {
+  transform: translateY(-10px);
+}
+.mobile-menu__art {
+  transform: translateY(24px);
+}
+.mobile-menu.is-open .mobile-menu__logo {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.8s var(--lap-ease-soft) 0.1s,
+    transform 1s var(--lap-ease-out) 0.1s;
+}
+.mobile-menu.is-open .mobile-menu__nav a {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.8s var(--lap-ease-soft) calc(0.2s + var(--i, 0) * 0.07s),
+    transform 1s var(--lap-ease-out) calc(0.2s + var(--i, 0) * 0.07s),
+    color 0.4s var(--lap-ease-soft);
+}
+.mobile-menu.is-open .mobile-menu__art {
+  opacity: 0.85;
+  transform: none;
+  transition:
+    opacity 1.4s var(--lap-ease-soft) 0.35s,
+    transform 1.6s var(--lap-ease-out) 0.35s;
+}
+
+/* ================================= HERO ================================= */
+
+/*
+ * Tres capas alineadas: el fondo, la aurora y el primer plano recortado. Con
+ * primer plano, la aurora nace detrás de las cumbres. El texto va abajo, sobre
+ * la parte oscura de la foto; el cielo queda libre para la aurora.
+ *
+ * En escritorio no ocupa toda la pantalla: a 1920×1080 quedaba un cielo
+ * vacío enorme. Se acorta para que la sección siguiente asome.
+ */
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  min-height: clamp(620px, 78svh, 820px);
+  padding-top: calc(var(--lap-header-tall) + 24px);
+  padding-bottom: clamp(72px, 9svh, 104px);
+  background: linear-gradient(180deg, var(--lap-brand-teal-dark), var(--lap-brand-ink));
+  color: #fff;
+}
+.hero__media {
+  position: absolute;
+  inset: -3%;
+  z-index: -2;
+  transition: translate 1.2s var(--lap-ease-out);
+}
+.hero__scene {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 75%;
+  animation: hero-drift 26s ease-in-out infinite alternate;
+}
+.hero__aurora {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+@keyframes hero-drift {
+  from {
+    transform: scale(1.12) translate(-1%, 1%);
+  }
+  to {
+    transform: scale(1.02) translate(1%, 0);
+  }
+}
+.hero__veil {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      rgb(14 28 32 / 0.5) 0%,
+      rgb(14 28 32 / 0.18) 18%,
+      rgb(14 28 32 / 0) 34%
+    ),
+    linear-gradient(0deg, rgb(14 28 32 / 0.82) 0%, rgb(14 28 32 / 0.52) 34%, rgb(14 28 32 / 0) 66%);
+}
+
+/* --- Titular ------------------------------------------------------------- */
+.hero__title {
+  margin: 0;
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-weight: 600;
+  /* Fraunces 9pt, el corte que usa el manual: más compacto y firme. */
+  font-variation-settings: 'opsz' 9;
+  font-size: clamp(2.375rem, 1.35rem + 2.9vw, 4.375rem);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+  text-shadow: 0 2px 40px rgb(10 20 24 / 0.28);
+}
+/* Cada línea sube desde su propia máscara. La que lleva el trazo le deja lugar. */
+.hero__line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
+}
+.hero__line--marked {
+  padding-bottom: 0.32em;
+  margin-bottom: -0.32em;
+}
+.hero__line > span {
+  display: inline-block;
+  animation: hero-line-up 1.2s var(--lap-ease-out) both;
+}
+@keyframes hero-line-up {
+  from {
+    transform: translateY(108%);
+  }
+}
+
+/*
+ * Palabra destacada: Fraunces cursiva y un trazo a mano que se dibuja después
+ * de la entrada, con los tonos claros de Verde, Teal y Boreas desplazándose
+ * lento. Sin brillo: el manual no contempla destellos.
+ */
+.hero__mark {
+  position: relative;
+  display: inline-block;
+  font-style: italic;
+  padding-right: 0.04em;
+}
+.hero__stroke {
+  position: absolute;
+  left: -3%;
+  bottom: -0.12em;
+  width: 106%;
+  height: 0.24em;
+  overflow: visible;
+  pointer-events: none;
+}
+.hero__stroke path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: hero-stroke 1.6s var(--lap-ease-soft) 1.3s forwards;
+}
+@keyframes hero-stroke {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.hero__lede {
+  margin: clamp(22px, 2.4vw, 32px) auto 0;
+  max-width: 40em;
+  font-size: clamp(1rem, 0.85rem + 0.45vw, 1.1875rem);
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  color: rgb(255 255 255 / 0.9);
+  text-wrap: pretty;
+}
+.hero__actions {
+  margin-top: clamp(28px, 2.8vw, 40px);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 14px 32px;
+}
+.hero__reveal {
+  animation: hero-rise 1.1s var(--lap-ease-out) both;
+}
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+}
+
+/* --- Botón principal ------------------------------------------------------ */
+/*
+ * Al pasar el mouse la luz se enciende como una aurora: tres velos difusos de
+ * Teal, Boreas y Verde que aparecen de a poco y derivan lento, en vez de un
+ * relleno que barre de lado a lado.
+ */
+.hero-cta {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 50px;
+  padding: 6px 6px 6px 22px;
+  border-radius: 999px;
+  background: var(--lap-brand-verde-mid);
+  color: var(--lap-brand-verde-dark);
+  font:
+    600 15.5px/1 var(--font-inter),
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  box-shadow: 0 14px 34px -14px rgb(0 0 0 / 0.55);
+  transition:
+    color 0.8s var(--lap-ease-soft),
+    transform 0.8s var(--lap-ease-soft);
+}
+.hero-cta::before {
+  content: '';
+  position: absolute;
+  inset: -45%;
+  z-index: -1;
+  background:
+    radial-gradient(42% 60% at 28% 55%, var(--lap-brand-teal) 0%, transparent 70%),
+    radial-gradient(40% 65% at 72% 42%, var(--lap-brand-boreas) 0%, transparent 72%),
+    radial-gradient(36% 50% at 50% 78%, var(--lap-brand-verde) 0%, transparent 70%),
+    var(--lap-brand-teal-dark);
+  filter: blur(8px);
+  opacity: 0;
+  transition: opacity 1s var(--lap-ease-soft);
+  animation: hero-cta-drift 9s ease-in-out infinite alternate paused;
+}
+.hero-cta:is(:hover, :focus-visible) {
+  color: #fff;
+  transform: translateY(-1px);
+}
+.hero-cta:is(:hover, :focus-visible)::before {
+  opacity: 1;
+  animation-play-state: running;
+}
+@keyframes hero-cta-drift {
+  from {
+    translate: -6% 2%;
+    rotate: -4deg;
+  }
+  to {
+    translate: 8% -3%;
+    rotate: 6deg;
+  }
+}
+.hero-cta__icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--lap-brand-verde);
+  color: #fff;
+  transition: background-color 0.9s var(--lap-ease-soft);
+}
+.hero-cta__icon svg {
+  transition: transform 0.9s var(--lap-ease-soft);
+}
+.hero-cta:is(:hover, :focus-visible) .hero-cta__icon {
+  background: rgb(255 255 255 / 0.14);
+}
+.hero-cta:is(:hover, :focus-visible) .hero-cta__icon svg {
+  transform: translateX(3px);
+}
+
+/* --- Enlace secundario ----------------------------------------------------- */
+.hero-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding-block: 14px;
+  font:
+    600 15.5px/1 var(--font-inter),
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+  letter-spacing: -0.01em;
+  color: #fff;
+  text-decoration: none;
+}
+.hero-link::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 6px 0;
+  height: 1.5px;
+  background: currentColor;
+  transform-origin: left;
+  transition: transform 0.5s var(--lap-ease-out);
+}
+.hero-link:hover::after {
+  transform: scaleX(0.3);
+}
+.hero-link svg {
+  transition: transform 0.5s var(--lap-ease-out);
+}
+/* La flecha avanza hacia donde lleva: abajo si es un ancla, a la derecha si no. */
+.hero-link:hover svg {
+  transform: translateY(4px);
+}
+.hero-link--forward:hover svg {
+  transform: translateX(4px);
+}
+
+/* --- Móvil ------------------------------------------------------------------ */
+/*
+ * En vertical la foto entera dejaba medio viewport de cielo entre la
+ * navegación y el titular. La escena sube (se recorta cielo) y el titular
+ * arranca más cerca; la aurora sigue viéndose en la franja de cielo.
+ */
+@media (max-width: 767px) {
+  .hero {
+    min-height: 0;
+    align-items: flex-start;
+    padding-top: calc(var(--lap-header-tall) + 42vw);
+    padding-bottom: 72px;
+  }
+  .hero__scene {
+    top: -24%;
+  }
+  .hero__veil {
+    background:
+      linear-gradient(180deg, rgb(14 28 32 / 0.5) 0%, rgb(14 28 32 / 0) 16%),
+      linear-gradient(
+        0deg,
+        rgb(14 28 32 / 0.86) 0%,
+        rgb(14 28 32 / 0.62) 42%,
+        rgb(14 28 32 / 0.2) 66%,
+        rgb(14 28 32 / 0) 80%
+      );
+  }
+  .hero__title {
+    text-shadow: 0 2px 24px rgb(10 20 24 / 0.45);
+  }
+  .hero__actions {
+    flex-direction: column;
+    gap: 6px;
+  }
+}

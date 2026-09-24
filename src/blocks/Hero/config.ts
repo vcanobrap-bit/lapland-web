@@ -1,7 +1,6 @@
 import type { Block } from 'payload'
 
 import { anchor } from '@/fields/anchor'
-import { surface } from '@/fields/surface'
 import { link } from '@/fields/link'
 
 export const HeroBlock: Block = {
@@ -13,9 +12,24 @@ export const HeroBlock: Block = {
   fields: [
     {
       name: 'title',
-      type: 'text',
+      // Área de texto para que el cliente decida dónde corta el titular: cada
+      // salto de línea es una línea que entra por separado.
+      type: 'textarea',
       label: 'Título',
       required: true,
+      admin: {
+        rows: 2,
+        description: 'Cada salto de línea es un corte del titular. Dos líneas es lo ideal.',
+      },
+    },
+    {
+      name: 'highlight',
+      type: 'text',
+      label: 'Palabra destacada',
+      admin: {
+        description:
+          'Tiene que aparecer tal cual en el título. Se muestra en cursiva con un trazo de aurora debajo.',
+      },
     },
     {
       name: 'subtitle',
@@ -23,28 +37,37 @@ export const HeroBlock: Block = {
       label: 'Subtítulo',
     },
     link({ label: 'Botón principal' }),
+    link({ name: 'secondaryCta', label: 'Enlace secundario' }),
     {
-      name: 'slides',
-      type: 'array',
-      label: 'Slides',
-      labels: { singular: 'Slide', plural: 'Slides' },
+      name: 'background',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Imagen de fondo',
       admin: {
         description:
-          'Sin slides el hero muestra solo el texto. Con uno o más, aparece el carrusel.',
+          'Paisaje horizontal con cielo arriba y la parte oscura abajo, donde va el texto. El punto de enfoque de la imagen decide el encuadre.',
       },
-      fields: [
-        {
-          name: 'image',
-          type: 'upload',
-          relationTo: 'media',
-          label: 'Imagen',
-          required: true,
-        },
-        { name: 'title', type: 'text', label: 'Título (opcional)' },
-        { name: 'text', type: 'textarea', label: 'Texto (opcional)' },
-      ],
+    },
+    {
+      name: 'foreground',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Primer plano recortado (opcional)',
+      admin: {
+        description:
+          'La misma imagen de fondo, del mismo tamaño, con el cielo transparente (PNG o WebP). Con ella la aurora pasa por detrás de las montañas.',
+      },
+    },
+    {
+      name: 'aurora',
+      type: 'checkbox',
+      label: 'Aurora animada',
+      defaultValue: true,
+      admin: {
+        description:
+          'Cortinas de luz en los colores de la marca, que se mueven lento sobre el cielo.',
+      },
     },
     anchor('inicio'),
-    surface(),
   ],
 }
