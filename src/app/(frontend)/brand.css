@@ -5,7 +5,7 @@
  * tokens.css porque ese archivo es una copia literal del repositorio del
  * design system anterior y no debe divergir de él.
  *
- * Hoy lo usan el encabezado y el hero. El resto de las secciones sigue con
+ * Hoy lo usan el encabezado, el hero y la sección de datos. El resto sigue con
  * tokens.css hasta que se rediseñe; cuando todas migren, este archivo pasa a
  * ser la única fuente.
  */
@@ -35,6 +35,11 @@
      El gris del manual (#a6a6a6) no alcanza contraste AA sobre blanco. */
   --lap-brand-ink: #182c2a;
   --lap-brand-ink-soft: #4f5f5c;
+
+  /* === SUPERFICIES === */
+  /* El manual trabaja sobre blanco; las tarjetas, en un gris muy claro. */
+  --lap-brand-paper: #ffffff;
+  --lap-brand-card: #f5f5f5;
 
   /* === MOVIMIENTO === */
   /* Salida larga y suave: entradas de texto y cambios de estado. */

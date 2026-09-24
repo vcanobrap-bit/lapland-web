@@ -520,33 +520,42 @@ export interface AboutBlock {
  * via the `definition` "StatsBlock".
  */
 export interface StatsBlock {
+  /**
+   * Línea corta sobre el título, en mayúsculas: «Salud mental y trabajo».
+   */
+  eyebrow?: string | null;
   title?: string | null;
-  intro?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
+  /**
+   * Se muestra junto al título: «Fuente: OMS y OIT, 2022».
+   */
+  source?: string | null;
+  /**
+   * Cada tarjeta se lee como una frase: lo que va antes, la cifra y lo que significa.
+   */
   items?:
     | {
         /**
-         * Corta y contundente: «1 de cada 8», «US$ 1 billón», «40–50 %».
+         * Lo que abre la frase: «En el mundo», «Más de».
+         */
+        lead?: string | null;
+        /**
+         * Corta y contundente: «1 de cada 8», «US$ 1 billón».
          */
         value: string;
         /**
-         * Una frase que complete la cifra.
+         * La parte de la cifra que se destaca: «1», «1 billón».
+         */
+        highlight?: string | null;
+        accent?: ('boreas' | 'verde' | 'teal') | null;
+        /**
+         * Continúa la frase después de la cifra, en minúscula: «personas vive con…».
          */
         label: string;
-        source?: string | null;
+        visual?: ('none' | 'people' | 'yearCost') | null;
+        /**
+         * El contador reparte este monto en el año y muestra lo acumulado hasta hoy. Un billón es 1000000000000.
+         */
+        annualAmount?: number | null;
         id?: string | null;
       }[]
     | null;
@@ -554,10 +563,6 @@ export interface StatsBlock {
    * Se enlaza como #ancla. Si se deja vacío, se genera una automáticamente.
    */
   anchor?: string | null;
-  /**
-   * El fondo oscuro es un recurso de énfasis: una o dos secciones en toda la página. Si se usa en todas, deja de destacar ninguna.
-   */
-  surface?: ('primary' | 'anchor') | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'stats';
@@ -857,18 +862,22 @@ export interface AboutBlockSelect<T extends boolean = true> {
  * via the `definition` "StatsBlock_select".
  */
 export interface StatsBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
   title?: T;
-  intro?: T;
+  source?: T;
   items?:
     | T
     | {
+        lead?: T;
         value?: T;
+        highlight?: T;
+        accent?: T;
         label?: T;
-        source?: T;
+        visual?: T;
+        annualAmount?: T;
         id?: T;
       };
   anchor?: T;
-  surface?: T;
   id?: T;
   blockName?: T;
 }

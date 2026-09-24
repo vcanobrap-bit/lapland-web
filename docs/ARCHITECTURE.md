@@ -82,11 +82,14 @@ interacción real.
 | `Hero/Component.tsx`                       | Server: titular, textos, botones e imágenes   |
 | `Hero/AuroraCanvas.tsx`                    | **Client**: aurora en WebGL                   |
 | `Hero/HeroParallax.tsx`                    | **Client**: la escena sigue apenas al puntero |
+| `Stats/Component.tsx`                      | Server: tarjetas, cifras y pictograma         |
+| `Stats/StatsReveal.tsx`                    | **Client**: marca la entrada en pantalla      |
+| `Stats/YearCost.tsx`                       | **Client**: costo del año, contando en vivo   |
 | `layout/Header.tsx`                        | Server: logos y menú desde el CMS             |
 | `layout/HeaderFrame.tsx`                   | **Client**: marca `data-scrolled` al bajar    |
 | `layout/MobileMenu.tsx`                    | **Client**: abierto/cerrado, foco, Escape     |
 
-Ni el hero ni el encabezado ni la sección de contacto son Client Components
+Ni el hero ni el encabezado ni las secciones de datos y contacto son Client Components
 enteros. Cada uno es un Server Component que monta adentro solo las piezas que
 necesitan el navegador. Las imágenes del hero y los logos llegan a esas piezas
 como children ya renderizados en el servidor.
@@ -116,6 +119,22 @@ movimiento que en clases utilitarias quedarían ilegibles.
 - **Fraunces** se carga con su eje óptico para el corte 9pt del manual.
   `font-optical-sizing: none` en `globals.css` evita que ese eje cambie cómo se
   ven los titulares de las demás secciones.
+
+### Datos
+
+La sección que sigue al hero, también con el manual. Sus estilos viven en
+`stats.css`.
+
+- **Cada tarjeta se lee como una frase**: lo que va antes («En el mundo»), la
+  cifra y lo que significa. El cliente elige qué parte de la cifra va en color
+  (Boreas, Verde o Teal); no hay cursiva.
+- **Gráficos**: el pictograma de 1 de cada 8 personas es arte fijo de la marca,
+  recortado en capas en `public/brand/personas/` para animar la entrada. El
+  costo acumulado del año se calcula en el navegador, porque depende de la
+  fecha de quien mira y la página es estática.
+- **Entrada**: `StatsReveal` marca la sección con `data-reveal` y cada pieza con
+  `data-in` al aparecer. Las transiciones viven solo en el estado `data-in`, así
+  que sin JavaScript o con movimiento reducido todo se ve quieto y completo.
 
 ### Formulario de contacto
 
@@ -201,7 +220,7 @@ siete secciones de la home. Existe porque un deploy nuevo arrancaría con el
 panel vacío y siete secciones que cargar a mano.
 
 Genera con sharp los placeholders de las secciones y la tarjeta para compartir
-de 1200×630. Los logos y la foto del hero (con su recorte sin cielo) son
+de 1200×630. Deja la sección de datos justo después del hero. Los logos y la foto del hero (con su recorte sin cielo) son
 archivos reales de la marca y viven en `src/scripts/seed-assets/`.
 
 Corre fuera de una request de Next, por lo que `revalidateTag` no está

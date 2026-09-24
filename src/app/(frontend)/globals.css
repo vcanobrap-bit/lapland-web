@@ -2,6 +2,7 @@
 @import './tokens.css';
 @import './brand.css';
 @import './hero.css';
+@import './stats.css';
 
 /*
  * Puente entre el design system y Tailwind.
@@ -27,7 +28,7 @@
   --color-moss: var(--lap-color-surface-support-medium);
   --color-fog: var(--lap-color-surface-support-light);
 
-  /* --- Color del manual v1.0 (brand.css). Hoy solo en encabezado y hero. -- */
+  /* --- Color del manual v1.0 (brand.css): encabezado, hero y datos. ------ */
   --color-teal: var(--lap-brand-teal);
   --color-teal-dark: var(--lap-brand-teal-dark);
   --color-teal-mid: var(--lap-brand-teal-mid);

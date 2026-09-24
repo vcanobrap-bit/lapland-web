@@ -180,6 +180,35 @@ const seed = async (): Promise<void> => {
           aurora: true,
         },
         {
+          // Justo después del hero: la evidencia que respalda la promesa.
+          blockType: 'stats',
+          anchor: 'datos',
+          eyebrow: 'Salud mental y trabajo',
+          title: 'Una erosión silenciosa de las personas que sostienen los resultados.',
+          source: 'Fuente: OMS y OIT, 2022',
+          items: [
+            {
+              lead: 'En el mundo',
+              value: '1 de cada 8',
+              highlight: '1',
+              accent: 'boreas',
+              label:
+                'personas vive con un trastorno de salud mental y esto representa una de las principales causas de ausentismo laboral.',
+              visual: 'people',
+            },
+            {
+              lead: 'Más de',
+              value: 'US$ 1 billón',
+              highlight: '1 billón',
+              accent: 'verde',
+              label:
+                'al año le cuestan a la economía mundial el estrés laboral y los riesgos psicosociales.',
+              visual: 'yearCost',
+              annualAmount: 1_000_000_000_000,
+            },
+          ],
+        },
+        {
           blockType: 'about',
           surface: 'primary',
           anchor: 'quienes-somos',
@@ -190,30 +219,6 @@ const seed = async (): Promise<void> => {
             bold('bienestar, la salud mental y la seguridad'),
             ' impulsen una sostenibilidad auténtica y una excelencia organizacional duradera.',
           ),
-        },
-        {
-          // El único momento oscuro de la página: las cifras son lo que más pesa.
-          blockType: 'stats',
-          surface: 'anchor',
-          anchor: 'datos',
-          title: '¿Sabías que…?',
-          items: [
-            {
-              value: '1 de cada 8',
-              label:
-                'personas en el mundo vive con un trastorno de salud mental, una de las principales causas de ausentismo laboral.',
-            },
-            {
-              value: 'US$ 1 billón',
-              label:
-                'le cuestan cada año el estrés laboral y los riesgos psicosociales a la economía mundial.',
-            },
-            {
-              value: '40–50 %',
-              label:
-                'menos síntomas de estrés y ansiedad presentan los equipos que perciben alta seguridad psicológica de su líder.',
-            },
-          ],
         },
         {
           blockType: 'whatWeDo',

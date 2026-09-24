@@ -5,6 +5,7 @@ import type { HeroBlock, Media } from '@/payload-types'
 
 import { Container } from '@/components/ui/Container'
 import { cn } from '@/lib/cn'
+import { splitHighlight } from '@/lib/highlight'
 import { resolveMedia, toImageSrc } from '@/lib/media'
 
 import { AuroraCanvas } from './AuroraCanvas'
@@ -18,14 +19,6 @@ const LINE_STEP_MS = 160
 
 /** El punto de enfoque de la imagen, cargado en el admin, decide el encuadre. */
 const focalPosition = (media: Media) => `${media.focalX ?? 50}% ${media.focalY ?? 50}%`
-
-/** Separa la palabra destacada de su línea, sin distinguir mayúsculas. */
-const splitHighlight = (line: string, highlight: string) => {
-  const start = line.toLocaleLowerCase('es').indexOf(highlight.toLocaleLowerCase('es'))
-  if (start === -1) return null
-  const end = start + highlight.length
-  return { before: line.slice(0, start), match: line.slice(start, end), after: line.slice(end) }
-}
 
 /**
  * Trazo a mano bajo la palabra destacada, en los tonos claros de Verde, Teal y
@@ -63,7 +56,7 @@ function AuroraStroke({ id }: { id: string }) {
 
 function Arrow({ direction }: { direction: 'right' | 'down' }) {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
       <path
         d={direction === 'right' ? 'M1 8h13M9 3l5 5-5 5' : 'M8 1v13M3 9l5 5 5-5'}
         stroke="currentColor"
