@@ -73,43 +73,61 @@ Después de cambiar campos del CMS: `generate:types` y `migrate:create`.
 
 ## Deploy en Vercel
 
-1. **Base de datos.** Crear una Postgres gestionada (Neon o Supabase) y copiar
-   la connection string con `?sslmode=require`.
+1. **Base de datos.** Crear una Postgres gestionada. En Supabase: Connect →
+   **Transaction pooler**, tipo URI, el "Shared pooler"
+   (`aws-0-<región>.pooler.supabase.com:6543`). La conexión directa de Supabase
+   es solo IPv6 y Vercel no conecta por IPv6.
 
-2. **Blob store.** En el proyecto de Vercel, Storage → Create → Blob. Vercel
-   inyecta `BLOB_READ_WRITE_TOKEN` automáticamente. Sin esto las imágenes que
-   suba el cliente se pierden: en serverless el filesystem es efímero.
+   Al string se le quitan los corchetes de la contraseña y se le agrega
+   `?uselibpqcompat=true&sslmode=require`. El driver trata `sslmode=require` a
+   secas como verificación completa del certificado, y el de Supabase lo firma
+   su propia CA: sin ese parámetro falla con _self-signed certificate in
+   certificate chain_.
 
-3. **Variables de entorno** en Vercel:
+2. **Blob store.** En Vercel, Storage → Create → Blob (acceso público). Se puede
+   crear antes que el proyecto; su `BLOB_READ_WRITE_TOKEN` está en la pestaña
+   `.env.local` del store. Sin esto las imágenes que suba el cliente se pierden:
+   en serverless el filesystem es efímero.
 
-   | Variable                 | Valor                                    |
-   | ------------------------ | ---------------------------------------- |
-   | `DATABASE_URI`           | Connection string de Postgres            |
-   | `PAYLOAD_SECRET`         | `openssl rand -base64 32`                |
-   | `PREVIEW_SECRET`         | `openssl rand -base64 32`                |
-   | `NEXT_PUBLIC_SERVER_URL` | El dominio final, sin barra al final     |
-   | `BLOB_READ_WRITE_TOKEN`  | Lo inyecta Vercel al crear el Blob store |
-
-4. **Build command:** ya viene resuelto en `vercel.json` (`npm run ci`, que
-   aplica las migraciones antes de construir). No hace falta configurarlo en la
-   interfaz.
-
-   `DATABASE_URI` tiene que estar disponible **durante el build**, no solo en
-   runtime: la home se prerenderiza y para eso consulta Payload.
-
-5. **Sembrar el contenido.** Con las variables de producción en tu `.env` local,
-   apuntando a la base de producción:
+3. **Preparar la base desde tu máquina**, con `DATABASE_URI` y
+   `BLOB_READ_WRITE_TOKEN` de producción en tu `.env`:
 
    ```bash
+   npm run migrate
    npm run seed
    ```
 
-   Deja el sitio publicado y crea el usuario administrador. Entrá a `/admin`,
-   iniciá sesión y **cambiá la contraseña**.
+   El token tiene que estar **antes** del seed: sin él, las imágenes quedan en
+   tu disco y producción no las ve, y un segundo seed no lo arregla porque
+   reutiliza los medios que ya existen. El seed crea el usuario administrador
+   (`SEED_EMAIL` / `SEED_PASSWORD`, o `editor@lapland.cl` / `Lapland123!` por
+   defecto): entrá a `/admin` y **cambiá la contraseña**.
 
-6. **Redeploy.** El seed escribe en la base sin pasar por Next, así que no puede
-   invalidar el cache: hace falta un deploy más para que la home se
-   pre-renderice con el contenido. A partir de ahí, publicar desde el panel
+   Para probar el sitio contra esa base, `npm run build && npm run start`.
+   **Nunca `npm run dev`** con la base de producción: en desarrollo Payload
+   sincroniza el schema por su cuenta y deja la base marcada como "modo dev";
+   después las migraciones del build de Vercel se frenan en una pregunta
+   interactiva y el deploy falla. Si hubo builds locales contra otra base,
+   borrar `.next/cache/fetch-cache` antes, o la home sale con datos viejos.
+
+4. **Proyecto en Vercel.** Importar el repo, conectar el Blob store y cargar
+   las variables de entorno:
+
+   | Variable                 | Valor                                  |
+   | ------------------------ | -------------------------------------- |
+   | `DATABASE_URI`           | Connection string de Postgres          |
+   | `PAYLOAD_SECRET`         | `openssl rand -base64 32`              |
+   | `PREVIEW_SECRET`         | `openssl rand -base64 32`              |
+   | `NEXT_PUBLIC_SERVER_URL` | El dominio final, sin barra al final   |
+   | `BLOB_READ_WRITE_TOKEN`  | Lo inyecta Vercel al conectar el store |
+
+   El build command ya viene en `vercel.json` (`npm run ci`: migraciones y
+   después build). `DATABASE_URI` tiene que estar disponible **durante el
+   build**, no solo en runtime: la home se prerenderiza consultando Payload.
+
+   Con la base ya sembrada, el primer deploy sale completo. Si el seed se corre
+   después de desplegar, hace falta un redeploy: el seed escribe sin pasar por
+   Next y no puede invalidar el cache. A partir de ahí, publicar desde el panel
    actualiza el sitio solo.
 
 `NEXT_PUBLIC_SERVER_URL` tiene que ser el dominio real: Payload lo usa para los
