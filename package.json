@@ -20,7 +20,8 @@
     "migrate:create": "payload migrate:create",
     "migrate": "payload migrate",
     "ci": "payload migrate && next build",
-    "seed": "payload run src/scripts/seed.ts"
+    "seed": "payload run src/scripts/seed.ts",
+    "db": "node src/scripts/db.mjs"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "^3.88.0",
@@ -39,11 +40,19 @@
     "@types/node": "^22.15.0",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
+    "embedded-postgres": "18.4.0-beta.17",
     "eslint": "^9.30.0",
     "eslint-config-next": "15.4.11",
     "prettier": "^3.6.0",
     "prettier-plugin-tailwindcss": "^0.6.13",
     "tailwindcss": "^4.1.11",
     "typescript": "^5.8.0"
+  },
+  "allowScripts": {
+    "@embedded-postgres/darwin-arm64": true,
+    "@embedded-postgres/darwin-x64": true,
+    "@embedded-postgres/linux-arm64": true,
+    "@embedded-postgres/linux-x64": true,
+    "@embedded-postgres/windows-x64": true
   }
 }

@@ -14,9 +14,12 @@ TailwindCSS v4 · ESLint · Prettier
 
 ## Setup local
 
-Requiere Node 20.9+ y una base Postgres.
+Requiere Node 20.9+. No hace falta instalar Postgres: el proyecto trae uno
+local para desarrollar.
 
 ```bash
+git clone https://github.com/vcanobrap-bit/lapland-web.git
+cd lapland-web
 npm install
 cp .env.example .env
 ```
@@ -29,14 +32,30 @@ openssl rand -base64 32   # PAYLOAD_SECRET
 openssl rand -base64 32   # PREVIEW_SECRET
 ```
 
-`DATABASE_URI` apunta a tu Postgres local. `BLOB_READ_WRITE_TOKEN` puede quedar
-vacío: sin token, los medios se guardan en disco.
+`DATABASE_URI` ya viene apuntando al Postgres local. `BLOB_READ_WRITE_TOKEN`
+queda vacío: sin token, los medios se guardan en disco.
+
+En una terminal, la base (queda corriendo; Ctrl+C la detiene):
 
 ```bash
-npm run migrate   # crea el schema
+npm run db
+```
+
+En otra:
+
+```bash
+npm run migrate   # crea el schema (la primera vez o si hay migraciones nuevas)
 npm run seed      # publica el contenido inicial
 npm run dev
 ```
+
+La base guarda sus datos en `.db/`, que no se versiona. Para empezar de cero,
+detenerla, borrar esa carpeta y repetir. Si el puerto 5432 está ocupado:
+`DB_PORT=5433 npm run db` y el mismo puerto en `DATABASE_URI`.
+
+**El `.env` de desarrollo nunca apunta a producción.** Las credenciales de
+Supabase y Blob van en un gestor de contraseñas: se usan al configurar Vercel
+y para correr a mano una migración o un seed contra producción (ver Deploy).
 
 - Sitio: http://localhost:3000
 - Admin: http://localhost:3000/admin
@@ -58,6 +77,7 @@ Los mensajes del formulario de contacto llegan a **Contenido → Mensajes**.
 
 | Comando                           | Qué hace                                        |
 | --------------------------------- | ----------------------------------------------- |
+| `npm run db`                      | Postgres local para desarrollar (en `.db/`)     |
 | `npm run dev`                     | Servidor de desarrollo                          |
 | `npm run build`                   | Build de producción                             |
 | `npm run ci`                      | Migraciones + build. Es el comando de deploy    |
