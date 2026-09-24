@@ -16,6 +16,9 @@ dist
 # payload
 media
 
+# postgres local (npm run db)
+.db
+
 # env
 .env
 .env*.local
